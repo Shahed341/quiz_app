@@ -1,0 +1,240 @@
+:root {
+  --accent: #6366f1;
+  --accent-light: #eef2ff;
+  --glass: rgba(255, 255, 255, 0.8);
+  --border: #e2e8f0;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --success: #22c55e;
+  --warning: #f59e0b;
+}
+
+.landpage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  color: var(--text-main);
+}
+
+/* --- Hero & Search Section --- */
+.search-section {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  padding: 80px 40px;
+  border-radius: 32px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.2);
+  margin-bottom: 50px;
+}
+
+.search-section h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 24px;
+  letter-spacing: -0.025em;
+}
+
+.search-bar-container {
+  position: relative;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.search-bar-container input {
+  width: 100%;
+  height: 60px;
+  padding: 0 24px 0 60px;
+  border-radius: 18px;
+  border: none;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  background: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.search-bar-container input:focus {
+  outline: none;
+  transform: scale(1.02);
+}
+
+.search-icon {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+/* --- Layout Grid --- */
+.main-content {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 40px;
+}
+
+@media (max-width: 900px) {
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Recent Activity Box --- */
+.recent-box {
+  background: white;
+  padding: 28px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.recent-list {
+  margin-top: 20px;
+}
+
+.recent-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.recent-item:last-child {
+  border-bottom: none;
+}
+
+.attempt-title {
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-main);
+}
+
+.attempt-date {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 4px 0 0 0;
+}
+
+.score-badge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 10px;
+}
+
+.score-badge.high { background: #f0fdf4; color: var(--success); }
+.score-badge.mid { background: #fffbeb; color: var(--warning); }
+
+/* --- Quiz Discovery --- */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: var(--text-muted);
+}
+
+.section-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.discover-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.discover-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.discover-card:hover {
+  transform: translateX(8px);
+  border-color: var(--accent);
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.1);
+}
+
+.discover-card h3 {
+  margin: 0 0 6px 0;
+  font-size: 1.1rem;
+}
+
+.discover-card p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.arrow {
+  color: var(--border);
+  transition: color 0.2s;
+}
+
+.discover-card:hover .arrow {
+  color: var(--accent);
+}/* Styling for the new Explore More button */
+.explore-more-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border: 2px dashed var(--accent);
+  border-radius: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.explore-more-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-style: solid;
+}
+
+/* Card Action Text visibility */
+.card-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(10px);
+  transition: 0.3s;
+}
+
+.discover-card:hover .action-text {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+  border: 1px dashed var(--border);
+  border-radius: 20px;
+}

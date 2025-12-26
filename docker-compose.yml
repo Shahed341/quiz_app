@@ -24,6 +24,10 @@ services:
       DB_USER: root
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+      - ./questions:/usr/src/questions  # Maps local questions folder to container
     depends_on:
       db:
         condition: service_healthy
@@ -34,5 +38,8 @@ services:
       - "5173:5173"
     environment:
       - VITE_API_URL=http://localhost:5000/api
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - backend
