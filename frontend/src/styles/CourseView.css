@@ -1,0 +1,134 @@
+/* --- Course View Header Extensions --- */
+.header-content-wide {
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.course-title-display {
+  font-size: 1.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  background: linear-gradient(to right, var(--cream-white), var(--ash));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+/* --- Navigation & Buttons --- */
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--ash);
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.back-btn:hover {
+  background: rgba(225, 29, 72, 0.1);
+  border-color: var(--accent-red);
+  color: var(--cream-white);
+  transform: translateX(-5px);
+}
+
+/* --- Section Dividers --- */
+.view-section {
+  margin-bottom: 50px;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+  padding-left: 5px;
+}
+
+.section-label span {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--ash);
+  text-transform: uppercase;
+}
+
+.label-line {
+  flex-grow: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--glass-border), transparent);
+}
+
+/* --- Enhanced Content Cards --- */
+.card-desc {
+  color: var(--ash);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.action-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+/* Quiz Specific Styling */
+.quiz-card:hover .action-link {
+  color: var(--cream-white);
+  background: var(--accent-red);
+  box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);
+}
+
+/* Flashcard Specific Styling */
+.flash-card:hover .action-link {
+  color: var(--cream-white);
+  background: var(--accent-green);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+/* --- Empty States --- */
+.empty-placeholder {
+  grid-column: 1 / -1;
+  background: var(--glass-bg);
+  border: 1px dashed var(--glass-border);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  color: var(--ash);
+  font-style: italic;
+}
+
+/* --- Responsive Adjustments for 80% Area --- */
+@media (max-width: 768px) {
+  .course-title-display {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+  }
+  
+  .dash-content {
+    padding: 20px;
+  }
+  
+  .back-btn span {
+    display: none; /* Icon only on small mobile */
+  }
+}

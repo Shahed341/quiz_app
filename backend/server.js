@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
@@ -7,10 +6,10 @@ require('dotenv').config();
 // Routes
 const quizRoute = require('./routes/quizRoute');
 const flashcardRoute = require('./routes/flashcardRoute');
+const courseRoute = require('./routes/courseRoute'); // NEW: Added for dashboard
 
-// Controllers (used only for auto-seeding)
-const quizController = require('./controllers/quizController');
-const flashcardController = require('./controllers/flashcardController');
+// Controller for unified seeding
+const courseController = require('./controllers/courseController');
 
 const app = express();
 app.use(cors());
@@ -32,34 +31,27 @@ app.set('db', db);
 // --- ROUTES ---
 app.use('/api/quizzes', quizRoute);
 app.use('/api/flashcards', flashcardRoute);
+app.use('/api/courses', courseRoute); // NEW: Dashboard pulls courses from here
 
 const PORT = process.env.PORT || 5000;
 
-// Utility to wait
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // --- STARTUP LOOP ---
 const startServer = async () => {
   try {
-    // Confirm DB reachable
     await db.query('SELECT 1');
-    console.log('DB connected ✔');
+    console.log('✅ DB Connected');
 
-    // Wait for schema to become available (important in Docker)
-    let tables = [];
     let tableNames = [];
-
     for (let i = 0; i < 15; i++) {
       const [rows] = await db.query('SHOW TABLES');
-      tables = rows;
-      tableNames = tables.map((t) => Object.values(t)[0]);
+      tableNames = rows.map((t) => Object.values(t)[0]);
 
-      // adjust this list if you add more tables
       if (tableNames.includes('flashcard_sets') && tableNames.includes('quizzes')) {
         break;
       }
-
-      console.log('Schema not ready — retrying...');
+      console.log('⏳ Schema not ready — retrying (Step 2)...');
       await wait(2000);
     }
 
@@ -67,26 +59,21 @@ const startServer = async () => {
       throw new Error('Database schema did not load in time');
     }
 
-    console.log('Schema ready ✔ — syncing content');
+    console.log('⚙️ Schema ready — syncing recursive Courses folder...');
 
-    // --- AUTO SEED ---
-    if (typeof quizController.autoSeed === 'function') {
-      await quizController.autoSeed(db);
-      console.log('Quizzes synced ✔');
+    // --- UNIFIED AUTO SEED ---
+    // This replaces separate quiz/flashcard seeders with the recursive folder scanner
+    if (courseController && typeof courseController.syncAllContent === 'function') {
+      await courseController.syncAllContent(db);
+      console.log('📚 All Courses, Quizzes, and Flashcards synced ✔');
     }
 
-    if (typeof flashcardController.autoSeed === 'function') {
-      await flashcardController.autoSeed(db);
-      console.log('Flashcards synced ✔');
-    }
-
-    // --- START SERVER ---
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+      console.log(`🚀 Server running on port ${PORT}`);
     });
   } catch (err) {
-    console.error('Startup error:', err.message);
-    console.log('Retrying in 5 seconds...');
+    console.error('❌ Startup error:', err.message);
+    console.log('🔄 Retrying in 5 seconds...');
     await wait(5000);
     startServer();
   }

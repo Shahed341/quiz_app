@@ -1,48 +1,56 @@
 import React, { useState } from 'react';
 import Landpage from './pages/Landpage';
+import CourseView from './pages/CourseView';
 import QuizPage from './pages/QuizPage';
-import Flashcards from './pages/Flashcards'; // Import the new page
+import Flashcards from './pages/Flashcards';
 
 function App() {
-  // Use 'view' to track where the user is: 'landpage', 'quiz', or 'flashcards'
   const [view, setView] = useState('landpage');
+  const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
-  // Navigation Handlers
-  const openQuiz = (id) => {
+  // When a Course card (e.g. CMPT-215) is clicked
+  const handleCourseSelect = (courseName) => {
+    setSelectedCourse(courseName);
+    setView('course-view');
+  };
+
+  const handleStartQuiz = (id) => {
     setSelectedId(id);
     setView('quiz');
   };
 
-  const openFlashcards = () => {
+  const handleStartFlashcards = (id) => {
+    setSelectedId(id);
     setView('flashcards');
   };
 
   const goHome = () => {
     setView('landpage');
-    setSelectedId(null);
+    setSelectedCourse(null);
   };
 
   return (
     <div className="app-main">
       {view === 'landpage' && (
-        <Landpage 
-          onSelectQuiz={openQuiz} 
-          onOpenFlashcards={openFlashcards} 
+        <Landpage onSelectCourse={handleCourseSelect} />
+      )}
+
+      {view === 'course-view' && (
+        <CourseView 
+          courseName={selectedCourse} 
+          onBack={goHome} 
+          onSelectQuiz={handleStartQuiz}
+          onSelectFlashcards={handleStartFlashcards}
         />
       )}
 
       {view === 'quiz' && (
-        <QuizPage 
-          quizId={selectedId} 
-          onBack={goHome} 
-        />
+        <QuizPage quizId={selectedId} onBack={() => setView('course-view')} />
       )}
 
       {view === 'flashcards' && (
-        <Flashcards 
-          onBack={goHome} 
-        />
+        <Flashcards setId={selectedId} onBack={() => setView('course-view')} />
       )}
     </div>
   );
