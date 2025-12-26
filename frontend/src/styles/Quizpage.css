@@ -1,0 +1,29 @@
+:root {
+  --primary: #6366f1;
+  --bg: #f8fafc;
+  --white: #ffffff;
+}
+
+body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; }
+.container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+
+.hero { text-align: center; margin-bottom: 50px; }
+.quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+
+.card { background: var(--white); padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+.btn-primary { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+
+/* Quiz Gameplay */
+.quiz-view { max-width: 600px; margin: 50px auto; padding: 20px; }
+.q-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+.options { display: flex; flex-direction: column; gap: 12px; margin: 25px 0; }
+.option-btn { display: flex; align-items: center; padding: 15px; border: 2px solid #f1f5f9; border-radius: 12px; background: none; text-align: left; transition: 0.2s; cursor: pointer; }
+.option-btn:hover { border-color: var(--primary); background: #f5f7ff; }
+.label { font-weight: bold; margin-right: 15px; color: var(--primary); }
+
+.progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; margin-bottom: 30px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--primary); transition: 0.4s; }
+
+.result-view { text-align: center; padding: 60px; background: white; border-radius: 20px; }
