@@ -27,7 +27,7 @@ services:
     volumes:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules
-      - ./questions:/usr/src/questions  # Maps local questions folder to container
+      - ./questions:/usr/src/questions  # Maps I:\Projects\Quiz\questions
     depends_on:
       db:
         condition: service_healthy

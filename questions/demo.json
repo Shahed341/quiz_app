@@ -1,0 +1,208 @@
+{
+  "quiz": {
+    "title": "Demo Quiz",
+    "description": "Core concepts, syntax, and behavior in C"
+  },
+  "questions": [
+    {
+      "quiz_id": 1,
+      "question_text": "Which symbol is used to end a statement in C?",
+      "option_a": ";",
+      "option_b": ":",
+      "option_c": ".",
+      "option_d": ",",
+      "correct_answer": "A",
+      "hint": "Think of terminators."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "Which data type stores a single character?",
+      "option_a": "int",
+      "option_b": "char",
+      "option_c": "float",
+      "option_d": "double",
+      "correct_answer": "B",
+      "hint": "Uses single quotes."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "What is the output type of sizeof operator?",
+      "option_a": "int",
+      "option_b": "long",
+      "option_c": "unsigned long",
+      "option_d": "size_t",
+      "correct_answer": "D",
+      "hint": "Defined in stddef.h"
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "Which function prints output to the screen?",
+      "option_a": "input()",
+      "option_b": "print()",
+      "option_c": "printf()",
+      "option_d": "cout",
+      "correct_answer": "C",
+      "hint": "Format strings are common here."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "What is the index of the first element in an array?",
+      "option_a": "0",
+      "option_b": "1",
+      "option_c": "-1",
+      "option_d": "Depends on compiler",
+      "correct_answer": "A",
+      "hint": "Zero-based."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "Which keyword is used to define a constant?",
+      "option_a": "let",
+      "option_b": "const",
+      "option_c": "#define",
+      "option_d": "static",
+      "correct_answer": "C",
+      "hint": "Preprocessor."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "Which operator accesses a structure member through a pointer?",
+      "option_a": ".",
+      "option_b": "&",
+      "option_c": "->",
+      "option_d": "*",
+      "correct_answer": "C",
+      "hint": "Arrow syntax."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "What happens if you access memory out of array bounds?",
+      "option_a": "Compiler error",
+      "option_b": "Guaranteed crash",
+      "option_c": "Undefined behavior",
+      "option_d": "Returns zero",
+      "correct_answer": "C",
+      "hint": "The standard doesn’t define it."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "Which loop guarantees at least one execution?",
+      "option_a": "for",
+      "option_b": "while",
+      "option_c": "do-while",
+      "option_d": "foreach",
+      "correct_answer": "C",
+      "hint": "Condition checked at the end."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "What does the 'break' statement do?",
+      "option_a": "Skips one iteration",
+      "option_b": "Exits the loop",
+      "option_c": "Ends the program",
+      "option_d": "Restarts loop",
+      "correct_answer": "B",
+      "hint": "Stops the current loop/switch."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "Which header contains printf?",
+      "option_a": "stdlib.h",
+      "option_b": "stdio.h",
+      "option_c": "string.h",
+      "option_d": "math.h",
+      "correct_answer": "B",
+      "hint": "Standard I/O."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "What is a pointer?",
+      "option_a": "A variable storing data",
+      "option_b": "A memory address",
+      "option_c": "A constant",
+      "option_d": "A library function",
+      "correct_answer": "B",
+      "hint": "Points to another variable."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "Which operator dereferences a pointer?",
+      "option_a": "&",
+      "option_b": "*",
+      "option_c": "%",
+      "option_d": "~",
+      "correct_answer": "B",
+      "hint": "Star operator."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "What is the default return type of main if omitted (historically)?",
+      "option_a": "void",
+      "option_b": "int",
+      "option_c": "long",
+      "option_d": "char",
+      "correct_answer": "B",
+      "hint": "Represents exit status."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "Which function allocates memory dynamically?",
+      "option_a": "malloc",
+      "option_b": "alloc",
+      "option_c": "assign",
+      "option_d": "create",
+      "correct_answer": "A",
+      "hint": "Requires free()."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "What does '==’ do?",
+      "option_a": "Assigns value",
+      "option_b": "Checks equality",
+      "option_c": "Compares addresses only",
+      "option_d": "None",
+      "correct_answer": "B",
+      "hint": "Used in conditions."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "Which keyword prevents modification of a variable?",
+      "option_a": "static",
+      "option_b": "final",
+      "option_c": "const",
+      "option_d": "volatile",
+      "correct_answer": "C",
+      "hint": "Compiler enforces immutability."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "How are strings represented?",
+      "option_a": "Array of chars with '\\0'",
+      "option_b": "Array of ints",
+      "option_c": "Linked list",
+      "option_d": "Single char",
+      "correct_answer": "A",
+      "hint": "Null terminator."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "What is recursion?",
+      "option_a": "Looping with for",
+      "option_b": "Function calling itself",
+      "option_c": "Memory allocation",
+      "option_d": "Pointer arithmetic",
+      "correct_answer": "B",
+      "hint": "Base case is critical."
+    },
+    {
+      "quiz_id": 1,
+      "question_text": "What does return 0 in main usually indicate?",
+      "option_a": "Warning",
+      "option_b": "Success",
+      "option_c": "Failure",
+      "option_d": "Nothing",
+      "correct_answer": "B",
+      "hint": "Exit status."
+    }
+  ]
+}

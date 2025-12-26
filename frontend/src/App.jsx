@@ -1,21 +1,47 @@
 import React, { useState } from 'react';
 import Landpage from './pages/Landpage';
 import QuizPage from './pages/QuizPage';
+import Flashcards from './pages/Flashcards'; // Import the new page
 
 function App() {
-  const [selectedQuizId, setSelectedQuizId] = useState(null);
+  // Use 'view' to track where the user is: 'landpage', 'quiz', or 'flashcards'
+  const [view, setView] = useState('landpage');
+  const [selectedId, setSelectedId] = useState(null);
 
-  // Router Logic
+  // Navigation Handlers
+  const openQuiz = (id) => {
+    setSelectedId(id);
+    setView('quiz');
+  };
+
+  const openFlashcards = () => {
+    setView('flashcards');
+  };
+
+  const goHome = () => {
+    setView('landpage');
+    setSelectedId(null);
+  };
+
   return (
     <div className="app-main">
-      {selectedQuizId ? (
-        <QuizPage 
-          quizId={selectedQuizId} 
-          onBack={() => setSelectedQuizId(null)} 
-        />
-      ) : (
+      {view === 'landpage' && (
         <Landpage 
-          onSelectQuiz={(id) => setSelectedQuizId(id)} 
+          onSelectQuiz={openQuiz} 
+          onOpenFlashcards={openFlashcards} 
+        />
+      )}
+
+      {view === 'quiz' && (
+        <QuizPage 
+          quizId={selectedId} 
+          onBack={goHome} 
+        />
+      )}
+
+      {view === 'flashcards' && (
+        <Flashcards 
+          onBack={goHome} 
         />
       )}
     </div>
