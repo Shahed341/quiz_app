@@ -27,7 +27,8 @@ services:
     volumes:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules
-      - ./questions:/usr/src/questions  # Maps I:\Projects\Quiz\questions
+      # FIX: Changed from ./questions to ./Courses to match your new local structure
+      - ./Courses:/usr/src/Courses  
     depends_on:
       db:
         condition: service_healthy
