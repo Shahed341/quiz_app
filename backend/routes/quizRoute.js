@@ -4,8 +4,6 @@ const quizController = require('../controllers/quizController');
 
 /**
  * DYNAMIC SYNC ROUTE
- * Instead of seeding one specific file, this triggers the folder scanner.
- * Useful if you add a JSON file while the server is already running.
  */
 router.post('/sync', async (req, res) => {
     try {
@@ -19,9 +17,14 @@ router.post('/sync', async (req, res) => {
 
 /**
  * DISPLAY ROUTES
- * These power the Landpage (all) and QuizPage (by ID).
  */
 router.get('/', quizController.getAllQuizzes);
 router.get('/:id', quizController.getQuizById);
+
+/**
+ * SAVE RESULTS ROUTE <--- ADD THIS
+ * This connects the frontend "Finish Quiz" action to the database save logic.
+ */
+router.post('/results', quizController.saveQuizResult); 
 
 module.exports = router;

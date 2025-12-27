@@ -43,4 +43,11 @@ CREATE TABLE IF NOT EXISTS flashcards (
     hint TEXT,
     difficulty ENUM('easy', 'medium', 'hard') DEFAULT 'medium',
     FOREIGN KEY (set_id) REFERENCES flashcard_sets(id) ON DELETE CASCADE
+);-- 6. Quiz Results Table (The missing piece)
+CREATE TABLE IF NOT EXISTS quiz_results (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    quiz_id INT NOT NULL,
+    score INT NOT NULL, -- Percentage (0-100)
+    completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
 );

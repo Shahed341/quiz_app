@@ -1,59 +1,116 @@
-/* --- Flat Page Layout --- */
-.course-page-flat {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-matte-ash); /* Flat uniform background */
+/* --- Root & Matte Palette --- */
+:root {
+  --bg-matte-ash: #121212;
+  --card-bg: #161616;
+  --card-hover: #1c1c1c;
+  --text-dim: #555555;
+  
+  /* Theme variables injected via React inline styles */
+  --theme-glow: #ffffff;
+  --theme-glow-soft: rgba(255, 255, 255, 0.2);
+  --score-contrast: #ffffff; 
 }
 
-.course-header-top {
-  height: 70px;
+.course-page-flat {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-matte-ash);
+  color: white;
+  overflow: hidden;
+}
+
+/* --- COMPACT HEADER --- */
+.course-header-compact {
+  height: 55px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #000;
   flex-shrink: 0;
 }
 
-.header-left {
+.header-left-group {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 15px;
 }
 
-.back-link-matte {
+.back-btn-tiny {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #777;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.back-btn-tiny:hover {
+  border-color: var(--theme-glow);
+  color: white;
+}
+
+/* --- HIGH VISIBILITY SEARCH BAR --- */
+.search-mini-wrapper {
+  position: relative;
+  width: 550px; /* Wider search as requested */
+  height: 38px;
+  padding: 1.5px;
+  background: rgba(255, 255, 255, 0.1); /* Lighter background for visibility */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+.snake-light-mini {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--theme-glow);
+  border-radius: 50%;
+  filter: blur(3px);
+  box-shadow: 0 0 12px var(--theme-glow);
+  offset-path: rect(0% 100% 100% 0% round 10px);
+  animation: linearMove 4s linear infinite;
+}
+
+.search-container-mini {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background: #000; /* Solid black core */
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+}
+
+.search-container-mini input {
   background: transparent;
   border: none;
-  color: #555;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 800;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.back-link-matte:hover { color: white; }
-
-.course-title-flat {
   color: white;
-  font-size: 1.3rem;
-  font-weight: 900;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin: 0;
+  font-size: 0.9rem;
+  margin-left: 12px;
+  outline: none;
+  width: 100%;
+  letter-spacing: 0.5px;
 }
 
-.header-right-stats {
-  color: #333;
-  font-weight: 800;
-  font-size: 0.65rem;
-  letter-spacing: 2px;
+.search-container-mini input::placeholder {
+  color: #444;
+  font-weight: 700;
 }
 
-/* --- Content Section --- */
+/* --- CONTENT AREA & SPACING --- */
 .course-content-flat {
   flex-grow: 1;
   overflow-y: auto;
@@ -61,61 +118,84 @@
 }
 
 .flat-section {
-  margin-bottom: 50px;
+  margin-bottom: 50px; /* Large gap between Quiz section and Flashcards */
 }
 
-.flat-section-header {
+.thin-section-header {
   display: flex;
-  justify-content: space-between; /* Arrow to the right */
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   padding-bottom: 10px;
+  margin-bottom: 25px; /* Gap between header and cards */
 }
 
-.arrow-btn-right {
-  background: transparent;
-  border: none;
-  color: #444;
-  cursor: pointer;
-  transition: 0.3s;
-  display: flex;
-  align-items: center;
-}
-
-.arrow-btn-right:hover {
-  color: white;
-  transform: translateY(2px);
-}
-
-/* --- Max Space Grid --- */
-.grid-layout-flat {
+/* --- GRID: 4 COLUMNS FULL WIDTH --- */
+.grid-layout-4-col {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Maximize horizontal space */
+  grid-template-columns: repeat(4, 1fr); 
   gap: 20px;
+  width: 100%;
 }
 
-.course-card-dark {
-  background: #1c1c1c;
-  border-radius: 12px;
+.card-compact {
+  background: var(--card-bg);
+  height: 140px; 
+  border-radius: 14px;
   padding: 20px;
-  height: 170px;
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-  transition: background 0.3s;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.course-card-dark:hover {
-  background: #252525;
+.card-compact:hover {
+  background: var(--card-hover);
+  transform: translateY(-4px);
+  border-color: var(--theme-glow-soft);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
 }
 
-/* Scrollbar Styling for Flat Page */
+/* --- SCORE TAG --- */
+.card-score-tag {
+  position: absolute;
+  top: 15px;
+  right: 18px;
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--score-contrast); 
+  text-shadow: 0 0 12px var(--score-contrast);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.name-tiny {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-top: 5px;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+/* --- UTILS --- */
+.dynamic-theme-text {
+  color: var(--theme-glow) !important;
+  text-shadow: 0 0 10px var(--theme-glow-soft);
+}
+
+.theme-icon-glow {
+  color: var(--theme-glow);
+  filter: drop-shadow(0 0 5px var(--theme-glow));
+}
+
+@keyframes linearMove {
+  from { offset-distance: 0%; }
+  to { offset-distance: 100%; }
+}
+
+/* Scrollbar */
 .course-content-flat::-webkit-scrollbar { width: 5px; }
-.course-content-flat::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-
-/* Glowing title overrides */
-.red-glow { color: var(--member-red) !important; text-shadow: 0 0 10px rgba(255, 77, 77, 0.3); }
-.blue-glow { color: var(--student-blue) !important; text-shadow: 0 0 10px rgba(52, 152, 219, 0.3); }
+.course-content-flat::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }

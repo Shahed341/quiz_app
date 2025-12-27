@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, Lightbulb, Trophy, CheckCircle2 } from 'lucide-react';
+import { ChevronLeft, Lightbulb, Trophy } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/QuizPage.css';
 
@@ -21,18 +21,23 @@ function QuizPage() {
       .catch((err) => console.error("Error loading quiz:", err));
   }, [quizId]);
 
-  const saveResult = (finalScore) => {
-    const history = JSON.parse(localStorage.getItem('quiz_history')) || [];
+  // FIXED: Save result to MySQL instead of localStorage
+  const saveResultToDatabase = async (finalScore) => {
     const percentage = Math.round((finalScore / quiz.questions.length) * 100);
     
-    const newEntry = {
-      title: quiz.title,
-      score: percentage,
-      date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
-    const updatedHistory = [newEntry, ...history].slice(0, 5);
-    localStorage.setItem('quiz_history', JSON.stringify(updatedHistory));
+    try {
+      await fetch('http://localhost:5000/api/quizzes/results', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          quiz_id: quizId,
+          score: percentage
+        }),
+      });
+      console.log("✅ Score synced to database");
+    } catch (err) {
+      console.error("❌ Failed to sync score:", err);
+    }
   };
 
   if (!quiz) return <div className="loading-stage">Initializing Assessment...</div>;
@@ -50,7 +55,7 @@ function QuizPage() {
       setCurr(curr + 1);
       setShowHint(false);
     } else {
-      saveResult(currentScore);
+      saveResultToDatabase(currentScore); // Trigger DB save
       setDone(true);
     }
   };
@@ -65,18 +70,20 @@ function QuizPage() {
         >
           <Trophy size={80} className="trophy-icon" />
           <h2 className="result-title">Quiz Complete!</h2>
-          <p className="result-subtitle">Excellent progress in {courseId?.toUpperCase()}</p>
+          <p className="result-subtitle">Excellent progress in {courseId?.replace(/-/g, ' ').toUpperCase()}</p>
           
           <div className="score-display">
-            <span className="score-big">{score}</span>
-            <span className="score-total">/ {quiz.questions.length}</span>
+            <span className="score-big">{Math.round((score / quiz.questions.length) * 100)}%</span>
+            <p className="score-fraction">{score} correct out of {quiz.questions.length}</p>
           </div>
 
           <div className="percentage-bar-container">
-            <div 
+            <motion.div 
               className="percentage-bar-fill" 
-              style={{ width: `${(score / quiz.questions.length) * 100}%` }}
-            ></div>
+              initial={{ width: 0 }}
+              animate={{ width: `${(score / quiz.questions.length) * 100}%` }}
+              transition={{ duration: 1 }}
+            />
           </div>
 
           <button className="btn-return-home" onClick={() => navigate(`/courses/${courseId}`)}>
@@ -89,7 +96,6 @@ function QuizPage() {
 
   return (
     <div className="quiz-page-container">
-      {/* HEADER */}
       <header className="quiz-header-minimal">
         <button className="back-link-matte" onClick={() => navigate(`/courses/${courseId}`)}>
           <ChevronLeft size={18} /> <span>EXIT QUIZ</span>
@@ -103,16 +109,13 @@ function QuizPage() {
         </div>
       </header>
 
-      {/* PROGRESS BAR */}
       <div className="quiz-progress-track">
         <motion.div 
           className="quiz-progress-fill"
-          initial={{ width: 0 }}
           animate={{ width: `${((curr + 1) / quiz.questions.length) * 100}%` }}
         />
       </div>
 
-      {/* QUESTION STAGE */}
       <main className="question-stage">
         <AnimatePresence mode="wait">
           <motion.div 
@@ -163,6 +166,5 @@ function QuizPage() {
     </div>
   );
 }
-
 
 export default QuizPage;
