@@ -1,263 +1,237 @@
 :root {
-  /* Color Palette */
-  --premium-dark: #0a0f18;      /* Deep midnight */
-  --card-bg: #161e2d;           /* Deep navy card */
-  --cream-white: #f8fafc;        /* High-contrast text */
-  --ash: #64748b;               /* Subtle UI text */
-  --accent-red: #e11d48;        /* Error/Primary Action */
-  --accent-green: #10b981;      /* Success/Active status */
+  /* Matte Palette */
+  --bg-matte-ash: #1a1a1a;
+  --bg-search-glass: rgba(35, 35, 35, 0.9);
+  --ash-dark: #282828;
   
-  /* Glassmorphism Props */
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-highlight: rgba(255, 255, 255, 0.12);
-  
-  /* Depth */
-  --shadow-depth: 0 20px 50px rgba(0, 0, 0, 0.6);
+  /* Brand Colors */
+  --sunset-red: #ff4e50;
+  --sunset-orange: #fc913a;
+  --tiger-orange: #ff8c00;
+  --event-green: #2ecc71;
+  --student-blue: #3498db;
+  --member-red: #ff4d4d;
 }
 
-/* --- Layout Container --- */
+/* --- Layout Core --- */
 .dashboard-wrapper {
+  background-color: var(--bg-matte-ash);
   height: 100vh;
   width: 100vw;
-  background-color: var(--premium-dark);
-  /* Sublte glow effects in corners */
-  background-image: 
-    radial-gradient(circle at 0% 0%, rgba(225, 29, 72, 0.05) 0%, transparent 35%),
-    radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.05) 0%, transparent 35%);
-  color: var(--cream-white);
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* No scroll on the wrapper */
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow: hidden;
 }
 
-/* --- Top Header (20% Space) --- */
+/* --- Search Header & Linear Clock Logic --- */
 .dash-header {
-  height: 20%;
-  min-height: 150px;
+  height: 20vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 40px;
-  border-bottom: 1px solid var(--glass-border);
-  background: rgba(10, 15, 24, 0.7);
-  backdrop-filter: blur(20px);
-  z-index: 100;
 }
 
-.header-content {
-  width: 100%;
-  max-width: 1100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 25px;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.brand h1 {
-  font-size: 1.6rem;
-  letter-spacing: 3px;
-  font-weight: 900;
-  margin: 0;
-  text-transform: uppercase;
-}
-
-.brand span {
-  color: var(--accent-red);
-}
-
-.icon-red {
-  color: var(--accent-red);
-  filter: drop-shadow(0 0 10px rgba(225, 29, 72, 0.5));
-}
-
-/* --- Search Bar --- */
-.search-glass-container {
+.search-glow-wrapper {
   position: relative;
   width: 100%;
-  max-width: 550px;
-}
-
-.search-icon-ash {
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--ash);
-}
-
-.search-glass-container input {
-  width: 100%;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  max-width: 700px;
+  height: 62px;
   border-radius: 16px;
-  padding: 16px 16px 16px 55px;
-  color: var(--cream-white);
-  font-size: 1rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; 
+  padding: 2px; 
+  background: rgba(255, 255, 255, 0.05); 
+}
+
+/* THE LINEAR SNAKE:
+   Moves along a rectangular path at a constant velocity.
+*/
+.snake-light {
+  position: absolute;
+  width: 12px; 
+  height: 12px;
+  background: var(--sunset-red);
+  border-radius: 50%;
+  z-index: 1;
+  filter: blur(2px);
+  box-shadow: 0 0 15px var(--sunset-red), 0 0 30px var(--sunset-red);
+
+  /* THE MAGIC: Motion Path along the 2px border track */
+  /* rect(top right bottom left) */
+  offset-path: rect(0% 100% 100% 0% round 16px);
+  animation: linearMove 8s linear infinite;
+  
+  /* Performance optimization */
+  will-change: offset-distance;
+}
+
+@keyframes linearMove {
+  from { offset-distance: 0%; }
+  to { offset-distance: 100%; }
+}
+
+.search-container-dark {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background: #000000; /* Solid black to block center glow */
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: inset 0 0 15px rgba(0,0,0,1);
+}
+
+.search-container-dark input {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 500;
   outline: none;
 }
 
-.search-glass-container input:focus {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--accent-red);
-  box-shadow: 0 0 25px rgba(225, 29, 72, 0.15);
+.search-icon-white-glow {
+  color: white;
+  margin-right: 15px;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1));
 }
 
-/* --- Bottom Content (80% Space) --- */
-.dash-content {
-  height: 80%;
-  padding: 50px 40px;
-  overflow-y: auto; /* Internal scrolling for the grid */
+/* --- Section Header Alignment --- */
+.section-header {
   display: flex;
-  justify-content: center;
-}
-
-/* Custom Scrollbar */
-.dash-content::-webkit-scrollbar {
-  width: 5px;
-}
-
-.dash-content::-webkit-scrollbar-thumb {
-  background: var(--glass-border);
-  border-radius: 10px;
-}
-
-.content-inner {
+  justify-content: space-between;
+  align-items: center; 
+  padding: 0 60px 20px 60px;
   width: 100%;
-  max-width: 1100px;
 }
 
-.section-label {
+.label-group {
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: var(--ash);
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-  margin-bottom: 35px;
-  text-transform: uppercase;
-}
-
-/* --- Course Grid --- */
-.course-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 30px;
-  padding-bottom: 60px;
-}
-
-/* --- Glass Cards --- */
-.glass-card {
-  background: var(--card-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 28px;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: var(--shadow-depth);
-  transition: transform 0.4s ease, border-color 0.3s ease;
-}
-
-/* Inner Light Source Effect */
-.glass-card::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%);
-  pointer-events: none;
-}
-
-.card-accent {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 5px;
-  background: linear-gradient(90deg, var(--accent-red), #fb7185);
-}
-
-.card-body {
-  padding: 35px;
-  display: flex;
-  flex-direction: column;
   gap: 15px;
 }
 
-.course-tag {
-  color: var(--ash);
-  font-size: 0.7rem;
+.enrolled-label {
+  color: #ffffff;
+  font-size: 1rem;
   font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  margin: 0;
+  line-height: 1;
+}
+
+.icon-white-glow {
+  color: #ffffff;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+}
+
+.sync-btn-glow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 8px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sync-btn-glow:hover {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* --- The Ash Dark Stage --- */
+.course-grid-cream {
+  background: var(--ash-dark);
+  flex-grow: 1;
+  margin: 0 40px 40px 40px;
+  border-radius: 24px;
+  padding: 40px;
+  overflow-y: auto;
+  box-shadow: inset 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+/* --- The Dark Cards --- */
+.course-card-dark {
+  background: #1c1c1c; 
+  border-radius: 20px;
+  height: 200px;
+  padding: 25px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); 
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.course-card-dark:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+  background: #222;
+}
+
+/* Dynamic Glowing Titles */
+.course-card-dark:nth-child(4n+1) .course-name-dynamic { color: var(--member-red); text-shadow: 0 0 10px rgba(255, 77, 77, 0.5); }
+.course-card-dark:nth-child(4n+2) .course-name-dynamic { color: var(--event-green); text-shadow: 0 0 10px rgba(46, 204, 113, 0.5); }
+.course-card-dark:nth-child(4n+3) .course-name-dynamic { color: var(--student-blue); text-shadow: 0 0 10px rgba(52, 152, 219, 0.5); }
+.course-card-dark:nth-child(4n+4) .course-name-dynamic { color: var(--tiger-orange); text-shadow: 0 0 10px rgba(255, 140, 0, 0.5); }
+
+.course-name-dynamic {
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin-top: 8px;
+}
+
+.module-tag {
+  color: #555;
+  font-size: 0.65rem;
+  font-weight: 800;
   letter-spacing: 1.5px;
 }
 
-.glass-card h3 {
-  font-size: 1.5rem;
-  margin: 0;
-  font-weight: 700;
-  color: var(--cream-white);
-  letter-spacing: -0.5px;
-}
-
-.card-footer {
-  margin-top: 15px;
+.card-footer-action {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: #777;
+  padding-top: 15px;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
-.status-green {
-  background: rgba(16, 185, 129, 0.1);
-  color: var(--accent-green);
-  padding: 5px 12px;
-  border-radius: 10px;
-  font-size: 0.75rem;
-  font-weight: 800;
+/* --- Animations --- */
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 
-.arrow-icon {
-  color: var(--ash);
-  transition: transform 0.3s ease, color 0.3s ease;
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-.glass-card:hover {
-  border-color: rgba(225, 29, 72, 0.4);
-}
-
-.glass-card:hover .arrow-icon {
-  transform: translateX(8px);
-  color: var(--accent-red);
-}
-
-/* --- Utility/Empty States --- */
-.sync-btn {
-  margin-left: auto;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  color: var(--ash);
-  padding: 6px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.sync-btn:hover {
-  background: var(--accent-green);
-  color: white;
-  border-color: transparent;
-}
-
-.empty-placeholder {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 100px;
-  color: var(--ash);
-  border: 1px dashed var(--glass-border);
-  border-radius: 20px;
+/* Custom Scrollbar */
+.course-grid-well::-webkit-scrollbar { width: 8px; }
+.course-grid-well::-webkit-scrollbar-thumb { 
+  background: var(--bg-matte-ash); 
+  border-radius: 10px; 
 }

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Search, LayoutGrid, ChevronRight, BookOpen, RefreshCw } from 'lucide-react';
+import { Search, BookOpen, RefreshCw, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import '../styles/Landpage.css';
 
 function Landpage({ onSelectCourse }) {
-  // Ensure initial state is an empty array to prevent .filter() crashes
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
@@ -12,22 +11,12 @@ function Landpage({ onSelectCourse }) {
   const fetchCourses = async () => {
     setLoading(true);
     try {
-      // Pointing to the new courseController endpoint
       const res = await fetch('http://localhost:5000/api/courses');
-      
-      if (!res.ok) throw new Error("Server responded with an error");
-      
       const data = await res.json();
-      
-      // Safety Check: Ensure the backend actually sent an array
-      if (Array.isArray(data)) {
-        setCourses(data);
-      } else {
-        setCourses([]);
-      }
+      setCourses(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error("Dashboard Fetch Error:", err);
-      setCourses([]); // Fallback to empty array on error
+      console.error("Fetch error:", err);
+      setCourses([]);
     } finally {
       setLoading(false);
     }
@@ -37,71 +26,85 @@ function Landpage({ onSelectCourse }) {
     fetchCourses();
   }, []);
 
-  // Use optional chaining or fallback to ensure filter doesn't break
   const filteredCourses = (courses || []).filter(c => 
-    typeof c === 'string' && c.toLowerCase().includes(searchTerm.toLowerCase())
+    c.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="dashboard-wrapper">
+      {/* HEADER: Ash Background with Snake-Light Search Bar */}
       <header className="dash-header">
-        <div className="header-content">
-          <div className="brand">
-            <LayoutGrid className="icon-red" size={28} />
-            <h1>ACADEMIC<span>DASH</span></h1>
-          </div>
+        <motion.div 
+          className="search-glow-wrapper"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {/* The Sunset Red Rotating Snake */}
+          <div className="snake-light"></div>
           
-          <div className="search-glass-container">
-            <Search className="search-icon-ash" size={20} />
+          <div className="search-container-dark">
+            {/* White Search Icon with Big Glow */}
+            <Search className="search-icon-white-glow" size={22} />
             <input 
               type="text" 
-              placeholder="Search for a course..." 
+              placeholder="Search enrolled courses..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-        </div>
+        </motion.div>
       </header>
 
       <main className="dash-content">
-        <div className="content-inner">
-          <div className="section-label">
-            <BookOpen size={16} />
-            <span>ENROLLED COURSES</span>
-            <button onClick={fetchCourses} className="sync-btn" title="Refresh from Database">
-              <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
-            </button>
+        <div className="section-header">
+          <div className="label-group">
+            {/* White Glowing Book Icon */}
+            <BookOpen size={20} className="icon-white-glow" />
+            <span className="enrolled-label">ENROLLED COURSES</span>
           </div>
+          
+          {/* White Glowing Sync Button */}
+          <button onClick={fetchCourses} className="sync-btn-glow">
+            <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
+          </button>
+        </div>
 
-          <div className="course-grid">
-            {loading ? (
-              <div className="loader-text">Fetching Courses from Database...</div>
-            ) : filteredCourses.length > 0 ? (
-              filteredCourses.map((course, index) => (
+        {/* CREAM WHITE GRID STAGE */}
+        <div className="course-grid-cream">
+          {loading ? (
+            <div className="status-text-dark">Synchronizing curriculum...</div>
+          ) : (
+            <div className="grid-layout">
+              {filteredCourses.map((course, index) => (
                 <motion.div 
                   key={index}
-                  className="glass-card"
-                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="course-card-dark"
+                  whileHover={{ y: -10, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => onSelectCourse(course)}
                 >
-                  <div className="card-accent" />
-                  <div className="card-body">
-                    <span className="course-tag">MODULE</span>
-                    <h3>{course}</h3>
-                    <div className="card-footer">
-                      <span className="status-green">Data Active</span>
-                      <ChevronRight size={20} className="arrow-icon" />
+                  <div className="card-inner">
+                    <div className="card-header">
+                      <span className="module-tag">MODULE</span>
+                      {/* Course titles colored via CSS dynamic nth-child logic */}
+                      <h3 className="course-name-dynamic">{course}</h3>
+                    </div>
+                    <div className="card-footer-action">
+                      <span className="enter-text">Enter Course</span>
+                      <ChevronRight size={18} />
                     </div>
                   </div>
                 </motion.div>
-              ))
-            ) : (
-              <div className="empty-placeholder">
-                {searchTerm ? "No courses match your search." : "No courses found. Ensure your JSON files have synced to the DB."}
-              </div>
-            )}
-          </div>
+              ))}
+              
+              {!loading && filteredCourses.length === 0 && (
+                <div className="empty-state-dark">
+                  No courses found matching "{searchTerm}"
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </main>
     </div>

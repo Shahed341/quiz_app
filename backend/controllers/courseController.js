@@ -4,7 +4,7 @@ const path = require('path');
 /**
  * RECURSIVE HELPER
  * Crawls through all subdirectories to find every file.
- * Handles the nested Courses/[CourseName]/[Lesson]/ structure.
+ * Handles the nested structure: Courses/[CourseName]/[Lesson]/[File]
  */
 const getAllFiles = (dirPath, arrayOfFiles) => {
     const files = fs.readdirSync(dirPath);
@@ -41,7 +41,6 @@ const courseController = {
 
             for (const filePath of allFiles) {
                 // Determine course name: /usr/src/Courses/[CourseName]/...
-                // Using path.sep for cross-platform compatibility
                 const pathParts = filePath.split(path.sep);
                 const coursesIdx = pathParts.indexOf('Courses');
                 const courseName = pathParts[coursesIdx + 1];
@@ -62,7 +61,12 @@ const courseController = {
                 // --- PROCESS QUIZZES (*-quiz.json) ---
                 if (filePath.endsWith('-quiz.json')) {
                     const { quiz, questions } = data;
-                    const [existing] = await db.query('SELECT id FROM quizzes WHERE title = ?', [quiz.title]);
+                    
+                    // FIXED: Check for title AND category to allow duplicate titles in different courses
+                    const [existing] = await db.query(
+                        'SELECT id FROM quizzes WHERE title = ? AND category = ?', 
+                        [quiz.title, courseName]
+                    );
 
                     if (existing.length === 0) {
                         console.log(`🌱 [DEBUG] Seeding Quiz: "${quiz.title}" into [${courseName}]`);
@@ -86,7 +90,12 @@ const courseController = {
                 // --- PROCESS FLASHCARDS (*-flashcard.json) ---
                 if (filePath.endsWith('-flashcard.json')) {
                     const { set, cards } = data;
-                    const [existing] = await db.query('SELECT id FROM flashcard_sets WHERE title = ?', [set.title]);
+                    
+                    // FIXED: Check for title AND category
+                    const [existing] = await db.query(
+                        'SELECT id FROM flashcard_sets WHERE title = ? AND category = ?', 
+                        [set.title, courseName]
+                    );
 
                     if (existing.length === 0) {
                         console.log(`🌱 [DEBUG] Seeding Flashcards: "${set.title}" into [${courseName}]`);
@@ -130,11 +139,10 @@ const courseController = {
             const [rows] = await db.query(query);
             const courses = rows.map(r => r.category);
             
-            console.log(`📡 [DEBUG] API: Sending ${courses.length} courses to dashboard.`);
+            console.log(`📡 [DEBUG] API: Sending ${courses.length} unique course categories to dashboard.`);
             res.json(courses);
         } catch (error) {
             console.error('❌ [DEBUG] API Error (getCourseList):', error.message);
-            // Return empty array so frontend .filter() doesn't crash
             res.status(500).json([]);
         }
     }

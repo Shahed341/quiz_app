@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, BookOpen, GraduationCap, PlayCircle, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
-import '../styles/Landpage.css'; 
+import { ChevronLeft, BookOpen, GraduationCap, PlayCircle, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/CourseView.css';
 
 function CourseView({ courseName, onBack, onSelectQuiz, onSelectFlashcards }) {
   const [items, setItems] = useState({ quizzes: [], flashcards: [] });
-  const [loading, setLoading] = useState(true);
+  const [showAllQuizzes, setShowAllQuizzes] = useState(false);
+  const [showAllFlashcards, setShowAllFlashcards] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,119 +17,117 @@ function CourseView({ courseName, onBack, onSelectQuiz, onSelectFlashcards }) {
         ]);
         const quizzes = await qRes.json();
         const flashcards = await fRes.json();
-
-        // Filter data based on the course name (e.g., "CMPT-215")
         setItems({
           quizzes: quizzes.filter(q => q.category === courseName),
           flashcards: flashcards.filter(f => f.category === courseName)
         });
-        setLoading(false);
-      } catch (err) {
-        console.error("Fetch error:", err);
-        setLoading(false);
-      }
+      } catch (err) { console.error(err); }
     };
     fetchData();
   }, [courseName]);
 
-  return (
-    <div className="dashboard-wrapper">
-      {/* Header Section */}
-      <header className="dash-header">
-        <div className="header-content-wide">
-          <button className="back-btn" onClick={onBack}>
-            <ChevronLeft size={20} /> <span>Courses</span>
-          </button>
-          
-          <motion.h2 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="course-title-display"
-          >
-            {courseName}
-          </motion.h2>
+  const visibleQuizzes = showAllQuizzes ? items.quizzes : items.quizzes.slice(0, 3);
+  const visibleFlashcards = showAllFlashcards ? items.flashcards : items.flashcards.slice(0, 3);
 
-          <div style={{ width: '120px' }} className="hide-mobile" /> 
+  return (
+    <motion.div className="course-page-flat" layout>
+      {/* HEADER: Pushed to the top */}
+      <header className="course-header-top">
+        <div className="header-left">
+          <button className="back-link-matte" onClick={onBack}>
+            <ChevronLeft size={18} /> <span>BACK</span>
+          </button>
+          <h2 className="course-title-flat">{courseName}</h2>
+        </div>
+        <div className="header-right-stats">
+          {items.quizzes.length + items.flashcards.length} MODULES AVAILABLE
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="dash-content">
-        <div className="content-inner">
-          
-          {/* Quizzes Section */}
-          <section className="view-section">
-            <div className="section-label">
-              <BookOpen size={18} color="var(--accent-red)" />
-              <span>Available Quizzes</span>
-              <div className="label-line" />
+      {/* FLAT SCROLLABLE AREA */}
+      <main className="course-content-flat">
+        
+        {/* Quizzes Section */}
+        <motion.section className="flat-section" layout>
+          <div className="flat-section-header">
+            <div className="label-group">
+              <BookOpen size={18} className="icon-white-glow" />
+              <span className="enrolled-label">RECENT QUIZZES</span>
             </div>
+            {items.quizzes.length > 3 && (
+              <button className="arrow-btn-right" onClick={() => setShowAllQuizzes(!showAllQuizzes)}>
+                {showAllQuizzes ? <ChevronUp size={22} /> : <ChevronDown size={22} />}
+              </button>
+            )}
+          </div>
 
-            <div className="course-grid">
-              {items.quizzes.length > 0 ? (
-                items.quizzes.map((quiz) => (
-                  <motion.div 
-                    key={quiz.id} 
-                    className="glass-card quiz-card" 
-                    whileHover={{ y: -5 }}
-                    onClick={() => onSelectQuiz(quiz.id)}
-                  >
-                    <div className="card-accent" style={{ background: 'var(--accent-red)' }} />
-                    <div className="card-body">
-                      <span className="course-tag">QUIZ</span>
-                      <h3>{quiz.title}</h3>
-                      <p className="card-desc">{quiz.description}</p>
-                      <div className="card-footer">
-                        <span className="action-link">
-                          <PlayCircle size={16} /> Start Attempt
-                        </span>
-                        <ArrowRight size={16} className="arrow-icon" />
-                      </div>
-                    </div>
-                  </motion.div>
-                ))
-              ) : !loading && <div className="empty-placeholder">No quizzes found for this module.</div>}
+          <motion.div className="grid-layout-flat" layout>
+            <AnimatePresence>
+              {visibleQuizzes.map((quiz) => (
+                <motion.div 
+                  key={quiz.id} 
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="course-card-dark" 
+                  onClick={() => onSelectQuiz(quiz.id)}
+                >
+                  <div className="card-inner">
+                    <span className="module-tag">EXAM</span>
+                    <h3 className="course-name-dynamic red-glow">{quiz.title}</h3>
+                    <p className="card-mini-desc">{quiz.description}</p>
+                  </div>
+                  <div className="card-footer-action">
+                    <span className="enter-text">Start</span>
+                    <PlayCircle size={16} />
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        </motion.section>
+
+        {/* Flashcards Section */}
+        <motion.section className="flat-section" layout>
+          <div className="flat-section-header">
+            <div className="label-group">
+              <GraduationCap size={18} className="icon-white-glow" />
+              <span className="enrolled-label">STUDY SETS</span>
             </div>
-          </section>
+            {items.flashcards.length > 3 && (
+              <button className="arrow-btn-right" onClick={() => setShowAllFlashcards(!showAllFlashcards)}>
+                {showAllFlashcards ? <ChevronUp size={22} /> : <ChevronDown size={22} />}
+              </button>
+            )}
+          </div>
 
-          {/* Flashcards Section */}
-          <section className="view-section">
-            <div className="section-label">
-              <GraduationCap size={18} color="var(--accent-green)" />
-              <span>Active Recall Sets</span>
-              <div className="label-line" />
-            </div>
-
-            <div className="course-grid">
-              {items.flashcards.length > 0 ? (
-                items.flashcards.map((set) => (
-                  <motion.div 
-                    key={set.id} 
-                    className="glass-card flash-card"
-                    whileHover={{ y: -5 }}
-                    onClick={() => onSelectFlashcards(set.id)}
-                  >
-                    <div className="card-accent" style={{ background: 'var(--accent-green)' }} />
-                    <div className="card-body">
-                      <span className="course-tag">STUDY SET</span>
-                      <h3>{set.title}</h3>
-                      <p className="card-desc">{set.description}</p>
-                      <div className="card-footer">
-                        <span className="action-link">
-                          <GraduationCap size={16} /> Flashcards
-                        </span>
-                        <ArrowRight size={16} className="arrow-icon" />
-                      </div>
-                    </div>
-                  </motion.div>
-                ))
-              ) : !loading && <div className="empty-placeholder">No flashcards assigned to this module yet.</div>}
-            </div>
-          </section>
-
-        </div>
+          <motion.div className="grid-layout-flat" layout>
+            <AnimatePresence>
+              {visibleFlashcards.map((set) => (
+                <motion.div 
+                  key={set.id} 
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="course-card-dark"
+                  onClick={() => onSelectFlashcards(set.id)}
+                >
+                  <div className="card-inner">
+                    <span className="module-tag">RECALL</span>
+                    <h3 className="course-name-dynamic blue-glow">{set.title}</h3>
+                    <p className="card-mini-desc">{set.description}</p>
+                  </div>
+                  <div className="card-footer-action">
+                    <span className="enter-text">Open</span>
+                    <ArrowRight size={16} />
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        </motion.section>
       </main>
-    </div>
+    </motion.div>
   );
 }
 
