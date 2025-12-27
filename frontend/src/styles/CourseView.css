@@ -1,73 +1,87 @@
-/* --- Root & Matte Palette --- */
+/* --- Course Page Stage (Landpage Alignment) --- */
 :root {
-  --bg-matte-ash: #121212;
-  --card-bg: #161616;
-  --card-hover: #1c1c1c;
-  --text-dim: #555555;
-  
-  /* Theme variables injected via React inline styles */
+  --bg-matte-ash: #1a1a1a;
+  --ash-dark: #282828;
+  --card-bg: #141414;
+  /* Theme variables injected via React */
   --theme-glow: #ffffff;
   --theme-glow-soft: rgba(255, 255, 255, 0.2);
-  --score-contrast: #ffffff; 
+  --score-contrast: #ffffff;
 }
 
 .course-page-flat {
+  background-color: var(--bg-matte-ash);
   height: 100vh;
-  width: 100%;
+  width: 100vw;
   display: flex;
   flex-direction: column;
-  background: var(--bg-matte-ash);
-  color: white;
   overflow: hidden;
 }
 
-/* --- COMPACT HEADER --- */
+/* --- Thin Header (Minimalist Style) --- */
 .course-header-compact {
-  height: 55px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: #000;
   flex-shrink: 0;
 }
 
 .header-left-group {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
 }
 
 .back-btn-tiny {
-  background: #1a1a1a;
-  border: 1px solid #333;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #777;
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.3s;
 }
 
 .back-btn-tiny:hover {
-  border-color: var(--theme-glow);
+  background: rgba(255, 255, 255, 0.05);
   color: white;
+  border-color: var(--theme-glow);
 }
 
-/* --- HIGH VISIBILITY SEARCH BAR --- */
-.search-mini-wrapper {
+.course-title-tiny {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+/* --- The "Ash Dark" Content Stage --- */
+.course-content-flat {
+  background: var(--ash-dark);
+  flex-grow: 1;
+  margin: 0 40px 40px 40px;
+  border-radius: 24px;
+  padding: 40px;
+  overflow-y: auto;
+  box-shadow: inset 0 5px 20px rgba(0,0,0,0.3);
+}
+
+/* --- Search Bar Visibility --- */
+.search-visible-glow {
   position: relative;
-  width: 550px; /* Wider search as requested */
-  height: 38px;
+  width: 500px;
+  height: 42px;
   padding: 1.5px;
-  background: rgba(255, 255, 255, 0.1); /* Lighter background for visibility */
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5);
 }
 
 .snake-light-mini {
@@ -76,10 +90,10 @@
   height: 10px;
   background: var(--theme-glow);
   border-radius: 50%;
-  filter: blur(3px);
-  box-shadow: 0 0 12px var(--theme-glow);
-  offset-path: rect(0% 100% 100% 0% round 10px);
-  animation: linearMove 4s linear infinite;
+  filter: blur(2px);
+  box-shadow: 0 0 15px var(--theme-glow);
+  offset-path: rect(0% 100% 100% 0% round 12px);
+  animation: linearMove 6s linear infinite;
 }
 
 .search-container-mini {
@@ -87,8 +101,8 @@
   z-index: 2;
   width: 100%;
   height: 100%;
-  background: #000; /* Solid black core */
-  border-radius: 9px;
+  background: #000;
+  border-radius: 11px;
   display: flex;
   align-items: center;
   padding: 0 15px;
@@ -99,103 +113,149 @@
   border: none;
   color: white;
   font-size: 0.9rem;
-  margin-left: 12px;
+  margin-left: 10px;
   outline: none;
   width: 100%;
-  letter-spacing: 0.5px;
 }
 
-.search-container-mini input::placeholder {
-  color: #444;
+/* --- Grid & Cards (Landpage Card Physics) --- */
+.grid-layout-4-col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  width: 100%;
+}
+
+.card-compact {
+  background: var(--card-bg); 
+  border-radius: 20px;
+  height: 170px;
+  padding: 25px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); 
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.card-compact:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+  background: #1c1c1c;
+  border-color: var(--theme-glow-soft);
+}
+
+/* --- Score Logic --- */
+.card-score-tag {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--score-contrast);
+  text-shadow: 0 0 10px var(--score-contrast);
+}
+
+.dynamic-theme-text {
+  color: var(--theme-glow);
+  text-shadow: 0 0 10px var(--theme-glow-soft);
+}
+
+.name-tiny {
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin-top: 8px;
+}
+
+.tag-tiny {
+  color: #555;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.card-bottom-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.action-text {
+  color: #777;
+  font-size: 0.8rem;
   font-weight: 700;
 }
 
-/* --- CONTENT AREA & SPACING --- */
-.course-content-flat {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 30px 40px;
-}
-
+/* --- Section Formatting --- */
 .flat-section {
-  margin-bottom: 50px; /* Large gap between Quiz section and Flashcards */
+  margin-bottom: 50px;
 }
 
 .thin-section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 10px;
-  margin-bottom: 25px; /* Gap between header and cards */
+  padding: 0 10px 15px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 25px;
 }
 
-/* --- GRID: 4 COLUMNS FULL WIDTH --- */
-.grid-layout-4-col {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); 
-  gap: 20px;
-  width: 100%;
-}
-
-.card-compact {
-  background: var(--card-bg);
-  height: 140px; 
-  border-radius: 14px;
-  padding: 20px;
+.label-group-mini {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.card-compact:hover {
-  background: var(--card-hover);
-  transform: translateY(-4px);
-  border-color: var(--theme-glow-soft);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-}
-
-/* --- SCORE TAG --- */
-.card-score-tag {
-  position: absolute;
-  top: 15px;
-  right: 18px;
-  font-size: 1rem;
+  align-items: center;
+  gap: 12px;
+  color: white;
   font-weight: 900;
-  color: var(--score-contrast); 
-  text-shadow: 0 0 12px var(--score-contrast);
-  background: rgba(0, 0, 0, 0.4);
-  padding: 2px 8px;
-  border-radius: 6px;
-}
-
-.name-tiny {
-  font-size: 1.15rem;
-  font-weight: 800;
-  margin-top: 5px;
-  line-height: 1.2;
-  letter-spacing: -0.3px;
-}
-
-/* --- UTILS --- */
-.dynamic-theme-text {
-  color: var(--theme-glow) !important;
-  text-shadow: 0 0 10px var(--theme-glow-soft);
+  letter-spacing: 2px;
+  font-size: 0.9rem;
 }
 
 .theme-icon-glow {
-  color: var(--theme-glow);
-  filter: drop-shadow(0 0 5px var(--theme-glow));
+  color: white;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
 }
 
+/* --- Animations & Scroll --- */
 @keyframes linearMove {
   from { offset-distance: 0%; }
   to { offset-distance: 100%; }
 }
 
-/* Scrollbar */
-.course-content-flat::-webkit-scrollbar { width: 5px; }
-.course-content-flat::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+.course-content-flat::-webkit-scrollbar { width: 8px; }
+.course-content-flat::-webkit-scrollbar-thumb { 
+  background: var(--bg-matte-ash); 
+  border-radius: 10px; 
+}
+.reveal-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #555;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--theme-glow);
+  border-color: var(--theme-glow-soft);
+  transform: translateY(2px);
+}
+
+/* Ensure the grid doesn't jump when items appear */
+.grid-layout-4-col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  width: 100%;
+  transition: all 0.5s ease;
+}
