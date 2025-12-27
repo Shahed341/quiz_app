@@ -1,13 +1,4 @@
 /* --- Course Page Stage (Landpage Alignment) --- */
-:root {
-  --bg-matte-ash: #1a1a1a;
-  --ash-dark: #282828;
-  --card-bg: #141414;
-  /* Theme variables injected via React */
-  --theme-glow: #ffffff;
-  --theme-glow-soft: rgba(255, 255, 255, 0.2);
-  --score-contrast: #ffffff;
-}
 
 .course-page-flat {
   background-color: var(--bg-matte-ash);

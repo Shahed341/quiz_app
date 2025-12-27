@@ -1,78 +1,103 @@
 /* --- Layout Frame --- */
 .dashboard-wrapper {
-  background-color: var(--bg-matte-ash); /* #1a1a1a */
+  background-color: var(--bg-main);
   height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Ensures no page-level scrolling */
+  overflow: hidden; /* Prevents global scrollbars */
+  transition: background-color 0.3s ease;
+  box-sizing: border-box;
 }
 
-/* --- Navbar: Locked at Top --- */
+/* --- Navbar --- */
 .simple-nav {
   height: 65px;
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 0 40px;
-  background: rgba(7, 11, 14, 0.4); /* Darker than background for depth */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  flex-shrink: 0; /* Prevents height from squishing */
-  z-index: 100;
+  justify-content: space-between; /* Pushes Logo left, Controls right */
+  padding: 0 40px; 
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+  z-index: 1000;
+  
+  /* CRITICAL FIX: Ensures padding doesn't push the nav off-screen */
+  box-sizing: border-box; 
 }
 
 .nav-logo {
   display: flex;
   align-items: center;
   gap: 12px;
-  color: white;
+  color: var(--text-main);
   font-weight: 900;
   letter-spacing: 3px;
   font-size: 1rem;
   cursor: pointer;
+  white-space: nowrap; /* Prevents logo from breaking into two lines */
 }
 
-/* Reusing your glow from Landpage.css */
-.nav-logo .icon-white-glow {
-  color: #ffffff;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+/* --- Theme Toggle Controls --- */
+.nav-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Keeps button snug to the right padding */
+  flex-shrink: 0;
 }
 
-/* --- Content Wrapper: The Fluid Middle --- */
+.theme-toggle-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;  /* Explicit width */
+  height: 40px; /* Explicit height */
+  border-radius: 10px;
+  color: var(--text-main);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0; /* Clear default padding */
+}
+
+.theme-toggle-btn:hover {
+  background: var(--border-color);
+  border-color: var(--text-main);
+  transform: translateY(-1px);
+}
+
+.nav-icon-glow {
+  color: #ffcc00;
+  filter: drop-shadow(0 0 8px rgba(255, 204, 0, 0.4));
+}
+
+.nav-icon-dark {
+  color: #3498db;
+  filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.4));
+}
+
+/* --- Content & Footer --- */
 .main-stage-wrapper {
-  flex-grow: 1; /* Takes up all available space */
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Keeps the internal scroll inside Landpage/CourseView */
+  overflow: hidden; /* Keeps the internal scroll inside the stage */
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* --- Footer: Locked at Bottom --- */
 .simple-footer {
   height: 45px;
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center; /* Centered reserved text */
-  background: rgba(7, 11, 14, 0.4);
+  justify-content: center;
+  background: var(--nav-bg);
   flex-shrink: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.03);
-}
-
-.simple-footer p {
-  color: #3a3a3a; /* Deep muted ash color */
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .simple-nav {
-    padding: 0 20px;
-  }
-  .nav-logo span {
-    font-size: 0.8rem;
-  }
+  border-top: 1px solid var(--border-color);
+  box-sizing: border-box;
 }

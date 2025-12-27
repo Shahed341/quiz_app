@@ -1,18 +1,4 @@
-:root {
-  /* Matte Palette */
-  --bg-matte-ash: #1a1a1a;
-  --bg-search-glass: rgba(35, 35, 35, 0.9);
-  --ash-dark: #282828;
-  
-  /* Brand Colors */
-  --sunset-red: #ff4e50;
-  --sunset-orange: #fc913a;
-  --tiger-orange: #ff8c00;
-  --event-green: #2ecc71;
-  --student-blue: #3498db;
-  --member-red: #ff4d4d;
-}
-
+/* --- Landpage Dark Theme Styles --- */
 /* --- Layout Core --- */
 .dashboard-wrapper {
   background-color: var(--bg-matte-ash);

@@ -1,13 +1,41 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+:root {
+  /* Functional Mapping - Default Dark */
+  --bg-main: #121212;         /* Your --bg-matte-ash */
+  --bg-stage: #1a1a1a;        /* Your --ash-dark */
+  --card-bg: #242424;
+  --text-main: #ffffff;
+  --text-dim: #888888;
+  --nav-bg: rgba(7, 11, 14, 0.4);
+  --border-color: rgba(255, 255, 255, 0.05);
+  --input-bg: #000000;
+  --shadow-inset: rgba(0, 0, 0, 0.5);
+
+  /* Brand Colors (Static - stay same in both modes) */
+  --sunset-red: #ff4e50;
+  --sunset-orange: #fc913a;
+  --tiger-orange: #ff8c00;
+  --event-green: #2ecc71;
+  --student-blue: #3498db;
+  --member-red: #ff4d4d;
 }
 
-html, body, #root {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden; 
-  background-color: #1a1a1a; /* Matte Ash Base */
+[data-theme='light'] {
+  /* Functional Mapping - Light Mode */
+  --bg-main: #e0e0e0;         /* Light Grey */
+  --bg-stage: #ffffff;        /* Pure White Stage */
+  --card-bg: #f0f0f0;         /* Soft Cards */
+  --text-main: #1a1a1a;
+  --text-dim: #666666;
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --border-color: rgba(0, 0, 0, 0.1);
+  --input-bg: #ffffff;
+  --shadow-inset: rgba(0, 0, 0, 0.05);
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
   font-family: 'Inter', sans-serif;
 }

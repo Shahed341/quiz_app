@@ -1,9 +1,11 @@
 .quiz-page-container {
   height: 100vh;
-  background: var(--bg-matte-ash);
+  /* UPDATED: Uses global matte background */
+  background: var(--bg-main); 
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: background 0.3s ease;
 }
 
 .quiz-header-minimal {
@@ -12,7 +14,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
+  /* UPDATED: Uses dynamic border */
+  border-bottom: 1px solid var(--border-color);
 }
 
 .quiz-identity {
@@ -22,20 +25,23 @@
 .quiz-breadcrumb {
   font-size: 0.65rem;
   letter-spacing: 2px;
-  color: #555;
+  /* UPDATED: Uses dynamic dim text */
+  color: var(--text-dim);
   font-weight: 800;
 }
 
 .quiz-title-main {
-  color: white;
+  /* UPDATED: Uses main text color */
+  color: var(--text-main);
   font-size: 1.1rem;
   margin: 0;
   letter-spacing: 1px;
 }
 
 .quiz-stats-box {
-  background: rgba(255,255,255,0.05);
-  color: white;
+  /* UPDATED: Uses stage/card background */
+  background: var(--border-color);
+  color: var(--text-main);
   padding: 8px 16px;
   border-radius: 8px;
   font-weight: 900;
@@ -45,7 +51,7 @@
 /* Progress */
 .quiz-progress-track {
   height: 4px;
-  background: rgba(255,255,255,0.05);
+  background: var(--border-color);
   width: 100%;
 }
 
@@ -53,6 +59,7 @@
   height: 100%;
   background: var(--member-red);
   box-shadow: 0 0 10px var(--member-red);
+  transition: width 0.4s ease;
 }
 
 /* Question Stage */
@@ -67,15 +74,18 @@
 .question-card-matte {
   width: 100%;
   max-width: 800px;
-  background: #1c1c1c;
+  /* UPDATED: Uses dynamic stage background */
+  background: var(--bg-stage);
   padding: 50px;
   border-radius: 24px;
-  border: 1px solid rgba(255,255,255,0.05);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 20px 50px var(--shadow-inset);
+  transition: background 0.3s ease;
 }
 
 .question-text {
-  color: white;
+  /* UPDATED: Uses main text color */
+  color: var(--text-main);
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 40px;
@@ -89,8 +99,9 @@
 }
 
 .quiz-option-btn {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
+  /* UPDATED: Uses dynamic card color */
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   padding: 20px;
   border-radius: 12px;
   display: flex;
@@ -102,14 +113,15 @@
 }
 
 .quiz-option-btn:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: white;
+  background: var(--border-color);
+  border-color: var(--text-main);
   transform: translateY(-2px);
 }
 
 .option-index {
-  background: #000;
-  color: white;
+  /* UPDATED: High contrast index box */
+  background: var(--text-main);
+  color: var(--bg-stage);
   width: 30px;
   height: 30px;
   display: flex;
@@ -120,40 +132,44 @@
 }
 
 .option-val {
-  color: #ccc;
+  /* UPDATED: Uses main text color */
+  color: var(--text-main);
   font-weight: 600;
+  opacity: 0.9;
 }
 
-/* Results */
+/* Results Section */
 .result-card-matte {
   text-align: center;
   padding: 60px;
-  background: #1c1c1c;
+  background: var(--bg-stage);
   border-radius: 30px;
+  border: 1px solid var(--border-color);
   width: 100%;
   max-width: 500px;
   margin: auto;
-}
-
-.trophy-icon {
-  color: var(--sunset-orange);
-  filter: drop-shadow(0 0 15px var(--sunset-orange));
-  margin-bottom: 20px;
+  box-shadow: 0 20px 50px var(--shadow-inset);
 }
 
 .score-big {
   font-size: 5rem;
   font-weight: 900;
-  color: white;
+  color: var(--text-main);
 }
 
 .btn-return-home {
   margin-top: 30px;
-  background: white;
-  color: black;
+  /* UPDATED: Button flips colors in dark/light */
+  background: var(--text-main);
+  color: var(--bg-main);
   border: none;
   padding: 15px 40px;
   border-radius: 12px;
   font-weight: 900;
   cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-return-home:hover {
+    transform: scale(1.05);
 }

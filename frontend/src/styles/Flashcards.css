@@ -1,9 +1,11 @@
 .flashcard-study-page {
   height: 100vh;
-  background: var(--bg-matte-ash);
+  /* UPDATED: Uses global matte background */
+  background: var(--bg-main);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: background 0.3s ease;
 }
 
 .study-header-top {
@@ -12,7 +14,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  /* UPDATED: Uses dynamic border */
+  border-bottom: 1px solid var(--border-color);
 }
 
 .study-set-info {
@@ -22,7 +25,8 @@
 }
 
 .set-title-label {
-  color: white;
+  /* UPDATED: Dynamic text color */
+  color: var(--text-main);
   font-weight: 800;
   letter-spacing: 2px;
   font-size: 0.9rem;
@@ -54,6 +58,12 @@
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Triggered by React state */
+.flashcard-inner.is-flipped {
+  transform: rotateY(180deg);
 }
 
 .card-face {
@@ -61,7 +71,8 @@
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  background: #1c1c1c;
+  /* UPDATED: Stage background for card surface */
+  background: var(--bg-stage);
   border-radius: 24px;
   padding: 40px;
   display: flex;
@@ -69,13 +80,16 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  /* UPDATED: Dynamic border and shadow */
+  border: 1px solid var(--border-color);
+  box-shadow: 0 20px 50px var(--shadow-inset);
+  transition: background 0.3s ease, border 0.3s ease;
 }
 
 .card-back {
   transform: rotateY(180deg);
-  background: #222;
+  /* UPDATED: Card background for the 'answer' side */
+  background: var(--card-bg);
 }
 
 .face-tag {
@@ -84,11 +98,13 @@
   font-size: 0.6rem;
   font-weight: 900;
   letter-spacing: 3px;
-  color: #555;
+  /* UPDATED: Dynamic dim text color */
+  color: var(--text-dim);
 }
 
 .card-text {
-  color: white;
+  /* UPDATED: Main text color */
+  color: var(--text-main);
   font-size: 1.8rem;
   font-weight: 700;
   margin: 0;
@@ -99,7 +115,7 @@
   text-shadow: 0 0 15px rgba(52, 152, 219, 0.4);
 }
 
-/* Controls */
+/* Controls Area */
 .study-controls-area {
   height: 120px;
   display: flex;
@@ -109,9 +125,10 @@
 }
 
 .nav-circle-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
+  /* UPDATED: Uses card-bg/border-color */
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
   width: 55px;
   height: 55px;
   border-radius: 50%;
@@ -123,13 +140,15 @@
 }
 
 .nav-circle-btn:hover {
-  background: white;
-  color: black;
+  /* UPDATED: Flips based on theme */
+  background: var(--text-main);
+  color: var(--bg-main);
+  transform: scale(1.1);
 }
 
 .main-flip-btn {
   background: var(--student-blue);
-  color: white;
+  color: white; /* Flip text usually stays white for brand contrast */
   border: none;
   padding: 15px 35px;
   border-radius: 50px;
@@ -140,6 +159,7 @@
   gap: 10px;
   cursor: pointer;
   box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+  transition: all 0.3s ease;
 }
 
 .main-flip-btn:hover {

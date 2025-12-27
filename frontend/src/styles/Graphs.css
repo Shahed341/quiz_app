@@ -1,14 +1,17 @@
 /* --- Container & Grid --- */
 .stats-container-flat {
-  padding: 40px 60px 80px 60px; /* Extra bottom padding for page end */
+  padding: 20px 60px 60px 60px;
   width: 100%;
-  background-color: transparent;
+  box-sizing: border-box;
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  /* Forces 3 equal columns that respect the parent width */
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 25px;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* --- Wrapper for Card + External Label --- */
@@ -17,6 +20,8 @@
   flex-direction: column;
   align-items: center;
   transition: transform 0.3s ease;
+  /* CRITICAL: Prevents Recharts SVG from pushing out the grid walls */
+  min-width: 0; 
 }
 
 .stats-wrapper:hover {
@@ -25,87 +30,110 @@
 
 /* --- The Chart Card --- */
 .stats-card-dark {
-  background: #1e1e1e; /* Deeper matte black */
-  border-radius: 16px;
-  padding: 20px;
-  height: 240px; /* Balanced height for readability */
+  /* Links to your theme toggle variables */
+  background: var(--card-bg); 
+  border-radius: 20px;
+  height: 220px; 
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 30px var(--shadow-inset);
+  /* Ensures nothing bleeds outside the rounded corners */
+  overflow: hidden; 
+  transition: background 0.3s ease, border 0.3s ease;
+  padding: 15px;
+  box-sizing: border-box;
 }
 
-/* Specialized padding for the Pie chart to accommodate legend */
+/* Specific layout for the middle Pie chart */
 .pie-card {
   justify-content: flex-start;
-  padding-top: 15px;
+  padding-top: 10px;
 }
 
-/* --- External Labels --- */
+/* --- External Labels (Titles under the cards) --- */
 .stats-external-label {
-  margin-top: 18px;
-  color: #555; /* Muted ash */
+  margin-top: 15px;
+  color: var(--text-dim); 
   font-weight: 900;
-  font-size: 0.72rem;
-  letter-spacing: 3px;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
   text-transform: uppercase;
   text-align: center;
   transition: color 0.3s ease;
 }
 
 .stats-wrapper:hover .stats-external-label {
-  color: #888; /* Brightens on hover */
+  color: var(--text-main);
 }
 
-/* --- Custom Pie Legend (Inside Card) --- */
+/* --- Custom Pie Legend --- */
 .custom-pie-legend {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
-  margin-top: 15px;
+  gap: 10px;
+  margin-top: 10px;
   width: 100%;
-  padding: 0 5px;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #888;
-  font-size: 10px;
+  color: var(--text-dim);
+  font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.5px;
 }
 
 .color-box {
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
 }
 
-/* --- Recharts Global Overrides --- */
+/* --- Recharts SVG Global Overrides --- */
+/* These target the auto-generated elements inside the chart */
+
 .recharts-cartesian-grid-horizontal line,
 .recharts-cartesian-grid-vertical line {
-  stroke: #222; /* Very subtle grid lines */
+  /* Grid lines will be light in dark mode, dark in light mode */
+  stroke: var(--border-color);
+  stroke-opacity: 0.6;
 }
 
 .recharts-text {
-  fill: #444 !important; /* Muted axis text */
+  /* Axis numbers and labels */
+  fill: var(--text-dim) !important; 
+  font-family: 'Inter', sans-serif;
   font-weight: 600;
 }
 
-.recharts-tooltip-cursor {
-  fill: rgba(255, 255, 255, 0.02);
+/* --- Tooltip Theming --- */
+.recharts-default-tooltip {
+  background-color: var(--bg-stage) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px var(--shadow-inset) !important;
+  padding: 10px !important;
+}
+
+.recharts-tooltip-label {
+  color: var(--text-main) !important;
+  font-weight: 900 !important;
+  margin-bottom: 5px !important;
+  font-size: 12px;
+}
+
+.recharts-tooltip-item {
+  font-size: 11px !important;
+  font-weight: 600 !important;
 }
 
 /* Clean up for the vertical bar chart labels */
 .recharts-y-axis .recharts-cartesian-axis-tick-value {
-  font-family: inherit;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
