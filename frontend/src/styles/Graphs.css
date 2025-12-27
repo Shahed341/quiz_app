@@ -1,0 +1,111 @@
+/* --- Container & Grid --- */
+.stats-container-flat {
+  padding: 40px 60px 80px 60px; /* Extra bottom padding for page end */
+  width: 100%;
+  background-color: transparent;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+/* --- Wrapper for Card + External Label --- */
+.stats-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.stats-wrapper:hover {
+  transform: translateY(-5px);
+}
+
+/* --- The Chart Card --- */
+.stats-card-dark {
+  background: #1e1e1e; /* Deeper matte black */
+  border-radius: 16px;
+  padding: 20px;
+  height: 240px; /* Balanced height for readability */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+/* Specialized padding for the Pie chart to accommodate legend */
+.pie-card {
+  justify-content: flex-start;
+  padding-top: 15px;
+}
+
+/* --- External Labels --- */
+.stats-external-label {
+  margin-top: 18px;
+  color: #555; /* Muted ash */
+  font-weight: 900;
+  font-size: 0.72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+.stats-wrapper:hover .stats-external-label {
+  color: #888; /* Brightens on hover */
+}
+
+/* --- Custom Pie Legend (Inside Card) --- */
+.custom-pie-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 15px;
+  width: 100%;
+  padding: 0 5px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #888;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.color-box {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Recharts Global Overrides --- */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #222; /* Very subtle grid lines */
+}
+
+.recharts-text {
+  fill: #444 !important; /* Muted axis text */
+  font-weight: 600;
+}
+
+.recharts-tooltip-cursor {
+  fill: rgba(255, 255, 255, 0.02);
+}
+
+/* Clean up for the vertical bar chart labels */
+.recharts-y-axis .recharts-cartesian-axis-tick-value {
+  font-family: inherit;
+  letter-spacing: 1px;
+}

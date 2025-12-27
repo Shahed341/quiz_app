@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, Lightbulb, Trophy } from 'lucide-react';
+import { ChevronLeft, Lightbulb, Trophy, CheckCircle2 } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
+import '../styles/QuizPage.css';
 
-function QuizPage({ quizId, onBack }) {
+function QuizPage() {
+  const { courseId, quizId } = useParams();
+  const navigate = useNavigate();
+
   const [quiz, setQuiz] = useState(null);
   const [curr, setCurr] = useState(0);
   const [score, setScore] = useState(0);
   const [showHint, setShowHint] = useState(false);
   const [done, setDone] = useState(false);
 
-  // Fetch the specific quiz and its 20 questions from the DB
   useEffect(() => {
     fetch(`http://localhost:5000/api/quizzes/${quizId}`)
       .then((res) => res.json())
-      .then((data) => {
-        setQuiz(data);
-      })
-      .catch((err) => console.error("Error loading quiz questions:", err));
+      .then((data) => setQuiz(data))
+      .catch((err) => console.error("Error loading quiz:", err));
   }, [quizId]);
 
-  // Helper to save result to LocalStorage for the Landpage sidebar
   const saveResult = (finalScore) => {
     const history = JSON.parse(localStorage.getItem('quiz_history')) || [];
     const percentage = Math.round((finalScore / quiz.questions.length) * 100);
@@ -30,12 +31,11 @@ function QuizPage({ quizId, onBack }) {
       date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
 
-    // Keep only the most recent 5 attempts
     const updatedHistory = [newEntry, ...history].slice(0, 5);
     localStorage.setItem('quiz_history', JSON.stringify(updatedHistory));
   };
 
-  if (!quiz) return <div className="loading">Preparing Questions...</div>;
+  if (!quiz) return <div className="loading-stage">Initializing Assessment...</div>;
 
   const q = quiz.questions[curr];
 
@@ -50,95 +50,116 @@ function QuizPage({ quizId, onBack }) {
       setCurr(curr + 1);
       setShowHint(false);
     } else {
-      saveResult(currentScore); // Save to history when finished
+      saveResult(currentScore);
       setDone(true);
     }
   };
 
   if (done) {
     return (
-      <motion.div 
-        initial={{ scale: 0.9, opacity: 0 }} 
-        animate={{ scale: 1, opacity: 1 }} 
-        className="result-view"
-      >
-        <Trophy size={80} color="#6366f1" strokeWidth={1.5} />
-        <h2>Quiz Complete!</h2>
-        <p className="final-score">
-          You scored <strong>{score}</strong> out of <strong>{quiz.questions.length}</strong>
-        </p>
-        <div className="percentage-circle">
-          {Math.round((score / quiz.questions.length) * 100)}%
-        </div>
-        <button className="btn-primary" onClick={onBack}>Return to Dashboard</button>
-      </motion.div>
+      <div className="quiz-page-container">
+        <motion.div 
+          initial={{ scale: 0.9, opacity: 0 }} 
+          animate={{ scale: 1, opacity: 1 }} 
+          className="result-card-matte"
+        >
+          <Trophy size={80} className="trophy-icon" />
+          <h2 className="result-title">Quiz Complete!</h2>
+          <p className="result-subtitle">Excellent progress in {courseId?.toUpperCase()}</p>
+          
+          <div className="score-display">
+            <span className="score-big">{score}</span>
+            <span className="score-total">/ {quiz.questions.length}</span>
+          </div>
+
+          <div className="percentage-bar-container">
+            <div 
+              className="percentage-bar-fill" 
+              style={{ width: `${(score / quiz.questions.length) * 100}%` }}
+            ></div>
+          </div>
+
+          <button className="btn-return-home" onClick={() => navigate(`/courses/${courseId}`)}>
+            Return to Course
+          </button>
+        </motion.div>
+      </div>
     );
   }
 
   return (
-    <div className="quiz-view">
-      <div className="quiz-header">
-        <button className="btn-back" onClick={onBack}>
-          <ChevronLeft size={20} /> Exit Quiz
+    <div className="quiz-page-container">
+      {/* HEADER */}
+      <header className="quiz-header-minimal">
+        <button className="back-link-matte" onClick={() => navigate(`/courses/${courseId}`)}>
+          <ChevronLeft size={18} /> <span>EXIT QUIZ</span>
         </button>
-        <div className="quiz-title-small">{quiz.title}</div>
-      </div>
-      
-      <div className="progress-container">
-        <div className="progress-text">Question {curr + 1} of {quiz.questions.length}</div>
-        <div className="progress-bar">
-          <div 
-            className="progress-fill" 
-            style={{ width: `${((curr + 1) / quiz.questions.length) * 100}%` }}
-          ></div>
+        <div className="quiz-identity">
+          <span className="quiz-breadcrumb">{courseId?.replace(/-/g, ' ').toUpperCase()}</span>
+          <h1 className="quiz-title-main">{quiz.title}</h1>
         </div>
+        <div className="quiz-stats-box">
+          {curr + 1} / {quiz.questions.length}
+        </div>
+      </header>
+
+      {/* PROGRESS BAR */}
+      <div className="quiz-progress-track">
+        <motion.div 
+          className="quiz-progress-fill"
+          initial={{ width: 0 }}
+          animate={{ width: `${((curr + 1) / quiz.questions.length) * 100}%` }}
+        />
       </div>
 
-      <AnimatePresence mode="wait">
-        <motion.div 
-          key={curr} 
-          initial={{ x: 20, opacity: 0 }} 
-          animate={{ x: 0, opacity: 1 }} 
-          exit={{ x: -20, opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="q-card"
-        >
-          <h2 className="question-text">{q.question_text}</h2>
-          
-          <div className="options">
-            {['A', 'B', 'C', 'D'].map(key => (
-              <button 
-                key={key} 
-                onClick={() => handleAnswer(key)} 
-                className="option-btn"
-              >
-                <div className="option-label">{key}</div>
-                <div className="option-text">{q[`option_${key.toLowerCase()}`]}</div>
-              </button>
-            ))}
-          </div>
-
-          <div className="hint-container">
-            <button 
-              className={`btn-hint ${showHint ? 'active' : ''}`} 
-              onClick={() => setShowHint(!showHint)}
-            >
-              <Lightbulb size={18} /> {showHint ? "Hide Hint" : "Need a hint?"}
-            </button>
-            <AnimatePresence>
-              {showHint && (
-                <motion.p 
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  className="hint-text"
+      {/* QUESTION STAGE */}
+      <main className="question-stage">
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={curr} 
+            initial={{ x: 30, opacity: 0 }} 
+            animate={{ x: 0, opacity: 1 }} 
+            exit={{ x: -30, opacity: 0 }}
+            className="question-card-matte"
+          >
+            <h2 className="question-text">{q.question_text}</h2>
+            
+            <div className="options-grid">
+              {['A', 'B', 'C', 'D'].map(key => (
+                <button 
+                  key={key} 
+                  onClick={() => handleAnswer(key)} 
+                  className="quiz-option-btn"
                 >
-                  💡 {q.hint}
-                </motion.p>
-              )}
-            </AnimatePresence>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+                  <span className="option-index">{key}</span>
+                  <span className="option-val">{q[`option_${key.toLowerCase()}`]}</span>
+                </button>
+              ))}
+            </div>
+
+            <footer className="question-footer">
+              <button 
+                className={`hint-toggle ${showHint ? 'active' : ''}`} 
+                onClick={() => setShowHint(!showHint)}
+              >
+                <Lightbulb size={16} /> {showHint ? "Hide Support" : "Request Hint"}
+              </button>
+              
+              <AnimatePresence>
+                {showHint && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="hint-bubble"
+                  >
+                    {q.hint}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </footer>
+          </motion.div>
+        </AnimatePresence>
+      </main>
     </div>
   );
 }

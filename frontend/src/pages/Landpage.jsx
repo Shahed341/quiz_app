@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Search, BookOpen, RefreshCw, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import Graphs from '../components/Graphs'; // Import the new component
 import '../styles/Landpage.css';
 
-function Landpage({ onSelectCourse }) {
+function Landpage() {
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const fetchCourses = async () => {
     setLoading(true);
@@ -30,9 +33,10 @@ function Landpage({ onSelectCourse }) {
     c.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const formatUrl = (name) => name.toLowerCase().replace(/\s+/g, '-');
+
   return (
     <div className="dashboard-wrapper">
-      {/* HEADER: Ash Background with Snake-Light Search Bar */}
       <header className="dash-header">
         <motion.div 
           className="search-glow-wrapper"
@@ -40,11 +44,8 @@ function Landpage({ onSelectCourse }) {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          {/* The Sunset Red Rotating Snake */}
           <div className="snake-light"></div>
-          
           <div className="search-container-dark">
-            {/* White Search Icon with Big Glow */}
             <Search className="search-icon-white-glow" size={22} />
             <input 
               type="text" 
@@ -56,21 +57,20 @@ function Landpage({ onSelectCourse }) {
         </motion.div>
       </header>
 
+      {/* Main Content Area */}
       <main className="dash-content">
         <div className="section-header">
           <div className="label-group">
-            {/* White Glowing Book Icon */}
             <BookOpen size={20} className="icon-white-glow" />
             <span className="enrolled-label">ENROLLED COURSES</span>
           </div>
           
-          {/* White Glowing Sync Button */}
           <button onClick={fetchCourses} className="sync-btn-glow">
             <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
 
-        {/* CREAM WHITE GRID STAGE */}
+        {/* Course Grid */}
         <div className="course-grid-cream">
           {loading ? (
             <div className="status-text-dark">Synchronizing curriculum...</div>
@@ -82,12 +82,11 @@ function Landpage({ onSelectCourse }) {
                   className="course-card-dark"
                   whileHover={{ y: -10, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => onSelectCourse(course)}
+                  onClick={() => navigate(`/courses/${formatUrl(course)}`)}
                 >
                   <div className="card-inner">
                     <div className="card-header">
                       <span className="module-tag">MODULE</span>
-                      {/* Course titles colored via CSS dynamic nth-child logic */}
                       <h3 className="course-name-dynamic">{course}</h3>
                     </div>
                     <div className="card-footer-action">
@@ -97,15 +96,15 @@ function Landpage({ onSelectCourse }) {
                   </div>
                 </motion.div>
               ))}
-              
-              {!loading && filteredCourses.length === 0 && (
-                <div className="empty-state-dark">
-                  No courses found matching "{searchTerm}"
-                </div>
-              )}
             </div>
           )}
         </div>
+
+        {/* --- STATS SECTION --- */}
+        {/* We pass the courses array so the bar graph can list them */}
+        {!loading && (
+           <Graphs coursesData={courses} />
+        )}
       </main>
     </div>
   );

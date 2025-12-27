@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, BookOpen, GraduationCap, PlayCircle, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useParams, useNavigate } from 'react-router-dom'; // Hooks for routing
 import '../styles/CourseView.css';
 
-function CourseView({ courseName, onBack, onSelectQuiz, onSelectFlashcards }) {
+function CourseView() {
+  const { courseId } = useParams(); // Grabs 'cmpt-215' from /courses/cmpt-215
+  const navigate = useNavigate();
+  
   const [items, setItems] = useState({ quizzes: [], flashcards: [] });
   const [showAllQuizzes, setShowAllQuizzes] = useState(false);
   const [showAllFlashcards, setShowAllFlashcards] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,36 +22,42 @@ function CourseView({ courseName, onBack, onSelectQuiz, onSelectFlashcards }) {
         ]);
         const quizzes = await qRes.json();
         const flashcards = await fRes.json();
+        
+        // Use courseId from URL to filter items
+        // We normalize the category name to match the URL format
         setItems({
-          quizzes: quizzes.filter(q => q.category === courseName),
-          flashcards: flashcards.filter(f => f.category === courseName)
+          quizzes: quizzes.filter(q => q.category.toLowerCase().replace(/\s+/g, '-') === courseId),
+          flashcards: flashcards.filter(f => f.category.toLowerCase().replace(/\s+/g, '-') === courseId)
         });
-      } catch (err) { console.error(err); }
+        setLoading(false);
+      } catch (err) { 
+        console.error(err); 
+        setLoading(false);
+      }
     };
     fetchData();
-  }, [courseName]);
+  }, [courseId]);
 
   const visibleQuizzes = showAllQuizzes ? items.quizzes : items.quizzes.slice(0, 3);
   const visibleFlashcards = showAllFlashcards ? items.flashcards : items.flashcards.slice(0, 3);
 
   return (
     <motion.div className="course-page-flat" layout>
-      {/* HEADER: Pushed to the top */}
+      {/* HEADER */}
       <header className="course-header-top">
         <div className="header-left">
-          <button className="back-link-matte" onClick={onBack}>
+          <button className="back-link-matte" onClick={() => navigate('/')}>
             <ChevronLeft size={18} /> <span>BACK</span>
           </button>
-          <h2 className="course-title-flat">{courseName}</h2>
+          {/* Displaying the ID from the URL as the title */}
+          <h2 className="course-title-flat">{courseId?.replace(/-/g, ' ').toUpperCase()}</h2>
         </div>
         <div className="header-right-stats">
           {items.quizzes.length + items.flashcards.length} MODULES AVAILABLE
         </div>
       </header>
 
-      {/* FLAT SCROLLABLE AREA */}
       <main className="course-content-flat">
-        
         {/* Quizzes Section */}
         <motion.section className="flat-section" layout>
           <div className="flat-section-header">
@@ -62,15 +73,17 @@ function CourseView({ courseName, onBack, onSelectQuiz, onSelectFlashcards }) {
           </div>
 
           <motion.div className="grid-layout-flat" layout>
-            <AnimatePresence>
+            <AnimatePresence mode="popLayout">
               {visibleQuizzes.map((quiz) => (
                 <motion.div 
                   key={quiz.id} 
                   layout
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
                   className="course-card-dark" 
-                  onClick={() => onSelectQuiz(quiz.id)}
+                  // NAVIGATE TO: /cmpt-215/quiz/1
+                  onClick={() => navigate(`/${courseId}/quiz/${quiz.id}`)}
                 >
                   <div className="card-inner">
                     <span className="module-tag">EXAM</span>
@@ -102,15 +115,17 @@ function CourseView({ courseName, onBack, onSelectQuiz, onSelectFlashcards }) {
           </div>
 
           <motion.div className="grid-layout-flat" layout>
-            <AnimatePresence>
+            <AnimatePresence mode="popLayout">
               {visibleFlashcards.map((set) => (
                 <motion.div 
                   key={set.id} 
                   layout
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
                   className="course-card-dark"
-                  onClick={() => onSelectFlashcards(set.id)}
+                  // NAVIGATE TO: /cmpt-215/flashcards/1
+                  onClick={() => navigate(`/${courseId}/flashcards/${set.id}`)}
                 >
                   <div className="card-inner">
                     <span className="module-tag">RECALL</span>
