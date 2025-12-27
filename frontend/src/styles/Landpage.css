@@ -1,17 +1,29 @@
 /* --- Landpage Dark Theme Styles --- */
+
 /* --- Layout Core --- */
 .dashboard-wrapper {
   background-color: var(--bg-matte-ash);
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  /* FIX: Changed from visible to auto to bring back the scrollbar */
+  overflow-y: auto; 
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
-/* --- Search Header & Linear Clock Logic --- */
+/* --- Content Wrapper --- */
+.dash-content {
+  flex: 1 0 auto;
+  /* FIX: Buffer zone ensures courses never clip behind your NavFooter's footer */
+  padding-bottom: 120px; 
+}
+
+/* --- Search Header --- */
 .dash-header {
   height: 20vh;
+  min-height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,33 +36,22 @@
   max-width: 700px;
   height: 62px;
   border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden; 
-  padding: 2px; 
-  background: rgba(255, 255, 255, 0.05); 
+  padding: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
 }
 
-/* THE LINEAR SNAKE:
-   Moves along a rectangular path at a constant velocity.
-*/
 .snake-light {
   position: absolute;
-  width: 12px; 
+  width: 12px;
   height: 12px;
   background: var(--sunset-red);
   border-radius: 50%;
   z-index: 1;
   filter: blur(2px);
   box-shadow: 0 0 15px var(--sunset-red), 0 0 30px var(--sunset-red);
-
-  /* THE MAGIC: Motion Path along the 2px border track */
-  /* rect(top right bottom left) */
   offset-path: rect(0% 100% 100% 0% round 16px);
   animation: linearMove 8s linear infinite;
-  
-  /* Performance optimization */
   will-change: offset-distance;
 }
 
@@ -64,12 +65,11 @@
   z-index: 2;
   width: 100%;
   height: 100%;
-  background: #000000; /* Solid black to block center glow */
+  background: #000;
   border-radius: 14px;
   display: flex;
   align-items: center;
   padding: 0 20px;
-  box-shadow: inset 0 0 15px rgba(0,0,0,1);
 }
 
 .search-container-dark input {
@@ -78,23 +78,24 @@
   background: transparent;
   color: white;
   font-size: 1.1rem;
-  font-weight: 500;
   outline: none;
 }
 
-.search-icon-white-glow {
-  color: white;
-  margin-right: 15px;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1));
+/* --- GRAPHS SECTION (TOP POSITION) --- */
+.graphs-section.top-graphs-spacing {
+  padding: 10px 40px 40px 40px;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 30px;
+  flex-shrink: 0;
 }
 
-/* --- Section Header Alignment --- */
+/* --- SECTION HEADER --- */
 .section-header {
   display: flex;
   justify-content: space-between;
-  align-items: center; 
+  align-items: center;
   padding: 0 60px 20px 60px;
-  width: 100%;
 }
 
 .label-group {
@@ -103,51 +104,57 @@
   gap: 15px;
 }
 
-.enrolled-label {
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-  margin: 0;
-  line-height: 1;
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.icon-white-glow {
-  color: #ffffff;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+.enrolled-label {
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .sync-btn-glow {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.05);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 8px;
-  width: 38px;
-  height: 38px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
 .sync-btn-glow:hover {
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: white;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
-/* --- The Ash Dark Stage --- */
+.dropdown-btn.active {
+  background: var(--sunset-red);
+  border-color: var(--sunset-red);
+  box-shadow: 0 0 15px rgba(255, 77, 77, 0.4);
+}
+
+/* --- COURSE GRID --- */
 .course-grid-cream {
   background: var(--ash-dark);
-  flex-grow: 1;
-  margin: 0 40px 40px 40px;
+  margin: 0 40px 0 40px; 
   border-radius: 24px;
   padding: 40px;
-  overflow-y: auto;
   box-shadow: inset 0 5px 20px rgba(0,0,0,0.3);
+  flex-shrink: 0;
+  transition: all 0.5s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .grid-layout {
@@ -156,31 +163,31 @@
   gap: 25px;
 }
 
-/* --- The Dark Cards --- */
+/* --- CARDS --- */
 .course-card-dark {
-  background: #141414; 
+  background: #141414;
   border-radius: 20px;
   height: 200px;
   padding: 25px;
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); 
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  will-change: transform;
 }
 
 .course-card-dark:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
   background: #222;
+  transform: translateY(-8px);
+  z-index: 10;
 }
 
-/* Dynamic Glowing Titles */
-.course-card-dark:nth-child(4n+1) .course-name-dynamic { color: var(--member-red); text-shadow: 0 0 10px rgba(255, 77, 77, 0.5); }
-.course-card-dark:nth-child(4n+2) .course-name-dynamic { color: var(--event-green); text-shadow: 0 0 10px rgba(46, 204, 113, 0.5); }
-.course-card-dark:nth-child(4n+3) .course-name-dynamic { color: var(--student-blue); text-shadow: 0 0 10px rgba(52, 152, 219, 0.5); }
-.course-card-dark:nth-child(4n+4) .course-name-dynamic { color: var(--tiger-orange); text-shadow: 0 0 10px rgba(255, 140, 0, 0.5); }
+/* Dynamic Colors */
+.course-card-dark:nth-child(4n+1) .course-name-dynamic { color: var(--member-red); }
+.course-card-dark:nth-child(4n+2) .course-name-dynamic { color: var(--event-green); }
+.course-card-dark:nth-child(4n+3) .course-name-dynamic { color: var(--student-blue); }
+.course-card-dark:nth-child(4n+4) .course-name-dynamic { color: var(--tiger-orange); }
 
 .course-name-dynamic {
   font-size: 1.6rem;
@@ -205,19 +212,32 @@
   font-weight: 700;
 }
 
-/* --- Animations --- */
-.animate-spin {
-  animation: spin 1s linear infinite;
+/* --- Custom Scrollbar --- */
+.dashboard-wrapper::-webkit-scrollbar {
+  width: 10px;
 }
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.dashboard-wrapper::-webkit-scrollbar-track {
+  background: var(--bg-matte-ash);
 }
 
-/* Custom Scrollbar */
-.course-grid-well::-webkit-scrollbar { width: 8px; }
-.course-grid-well::-webkit-scrollbar-thumb { 
-  background: var(--bg-matte-ash); 
-  border-radius: 10px; 
+.dashboard-wrapper::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+  border: 2px solid var(--bg-matte-ash);
 }
+
+/* --- Responsive Layout --- */
+@media (max-width: 1300px) {
+  .grid-layout { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .grid-layout { grid-template-columns: 1fr; }
+  .section-header { padding: 0 30px 20px 30px; }
+  .dash-content { padding-bottom: 160px; } 
+}
+
+/* --- ANIMATIONS --- */
+.animate-spin { animation: spin 1s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

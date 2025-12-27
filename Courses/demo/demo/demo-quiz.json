@@ -1,0 +1,108 @@
+{
+  "quiz": {
+    "title": "Supercar Fundamentals",
+    "description": "High-performance road cars, engineering, and brand facts"
+  },
+  "questions": [
+    {
+      "quiz_id": 2,
+      "question_text": "Which company manufactures the Aventador?",
+      "option_a": "Ferrari",
+      "option_b": "Lamborghini",
+      "option_c": "McLaren",
+      "option_d": "Bugatti",
+      "correct_answer": "B",
+      "hint": "Italian bull logo."
+    },
+    {
+      "quiz_id": 2,
+      "question_text": "What does ‘V12’ refer to in an engine?",
+      "option_a": "12 spark plugs",
+      "option_b": "12 exhaust pipes",
+      "option_c": "12 cylinders",
+      "option_d": "12 turbos",
+      "correct_answer": "C",
+      "hint": "Cylinder count."
+    },
+    {
+      "quiz_id": 2,
+      "question_text": "Which supercar is known for the ‘butterfly doors’ style?",
+      "option_a": "McLaren 720S",
+      "option_b": "Porsche 911",
+      "option_c": "Nissan GT-R",
+      "option_d": "Chevrolet Corvette",
+      "correct_answer": "A",
+      "hint": "British lightweight brand."
+    },
+    {
+      "quiz_id": 2,
+      "question_text": "What main benefit does carbon-fiber bodywork provide?",
+      "option_a": "More color options",
+      "option_b": "Lower cost",
+      "option_c": "Reduced weight",
+      "option_d": "Louder exhaust",
+      "correct_answer": "C",
+      "hint": "Performance through lightness."
+    },
+    {
+      "quiz_id": 2,
+      "question_text": "Which model first exceeded 400 km/h production speed records?",
+      "option_a": "Koenigsegg CCR",
+      "option_b": "Bugatti Veyron",
+      "option_c": "Hennessey Venom GT",
+      "option_d": "Ferrari Enzo",
+      "correct_answer": "B",
+      "hint": "French brand owned by VW Group."
+    },
+    {
+      "quiz_id": 2,
+      "question_text": "What does ‘horsepower’ measure?",
+      "option_a": "Fuel capacity",
+      "option_b": "Engine speed only",
+      "option_c": "Engine power output",
+      "option_d": "Brake life",
+      "correct_answer": "C",
+      "hint": "Ability to do work."
+    },
+    {
+      "quiz_id": 2,
+      "question_text": "All-wheel drive primarily improves what?",
+      "option_a": "Top speed",
+      "option_b": "Fuel economy",
+      "option_c": "Traction",
+      "option_d": "Cabin comfort",
+      "correct_answer": "C",
+      "hint": "Helps launch hard."
+    },
+    {
+      "quiz_id": 2,
+      "question_text": "Which brand created the LaFerrari?",
+      "option_a": "Ferrari",
+      "option_b": "Pagani",
+      "option_c": "Aston Martin",
+      "option_d": "Lotus",
+      "correct_answer": "A",
+      "hint": "Prancing horse emblem."
+    },
+    {
+      "quiz_id": 2,
+      "question_text": "What is a ‘hybrid’ supercar?",
+      "option_a": "Runs only on electricity",
+      "option_b": "Uses both engine and electric motors",
+      "option_c": "Uses diesel only",
+      "option_d": "Has two fuel tanks only",
+      "correct_answer": "B",
+      "hint": "Dual power sources."
+    },
+    {
+      "quiz_id": 2,
+      "question_text": "Active aerodynamics mainly help with:",
+      "option_a": "Interior cooling",
+      "option_b": "Improving downforce and stability",
+      "option_c": "Charging batteries",
+      "option_d": "Reducing engine size",
+      "correct_answer": "B",
+      "hint": "Wings that move with speed."
+    }
+  ]
+}
