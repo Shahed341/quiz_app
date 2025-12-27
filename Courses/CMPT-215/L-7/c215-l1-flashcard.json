@@ -1,0 +1,14 @@
+{
+  "set": {
+    "title": "w Pointers",
+    "description": "Master memory addresses and dereferencing.",
+    "category": "C Programming"
+  },
+  "cards": [
+    {
+      "front": "What symbol is used to get the address of a variable?",
+      "back": "& (Ampersand)",
+      "hint": "Address-of operator"
+    }
+  ]
+}

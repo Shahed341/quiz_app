@@ -1,0 +1,19 @@
+{
+  "set": {
+    "title": "F Keywords",
+    "description": "Quick recall for C language keywords",
+    "category": "Programming"
+  },
+  "cards": [
+    {
+      "front": "Which keyword is used to find the size of a variable?",
+      "back": "sizeof",
+      "hint": "It is an operator, not a function."
+    },
+    {
+      "front": "Keyword to jump out of a loop?",
+      "back": "break",
+      "hint": "Also used in switch statements."
+    }
+  ]
+}
