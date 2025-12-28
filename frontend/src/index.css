@@ -21,12 +21,12 @@
 
 [data-theme='light'] {
   /* Functional Mapping - Light Mode */
-  --bg-main: #e0e0e0;         /* Light Grey */
+  --bg-main: #f5ffff;         /* Light Grey */
   --bg-stage: #ffffff;        /* Pure White Stage */
-  --card-bg: #f0f0f0;         /* Soft Cards */
-  --text-main: #1a1a1a;
+  --card-bg: #ffffff;         /* Soft Cards */
+  --text-main: #ffffff;
   --text-dim: #666666;
-  --nav-bg: rgba(255, 255, 255, 0.8);
+  --nav-bg: rgba(0, 0, 0, 0.8);
   --border-color: rgba(0, 0, 0, 0.1);
   --input-bg: #ffffff;
   --shadow-inset: rgba(0, 0, 0, 0.05);
