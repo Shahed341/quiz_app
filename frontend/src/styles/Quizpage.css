@@ -295,3 +295,56 @@
     padding: 0 20px;
   }
 }
+/* Add these to your existing QuizPage.css */
+
+.quiz-header-minimal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-left, .header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-action-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.header-action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #ef4444 !important; /* Red for delete */
+  color: white;
+  border-color: #f87171;
+}
+
+.header-action-btn span {
+  display: inline-block;
+}
+
+/* Hide text on small screens */
+@media (max-width: 600px) {
+  .header-action-btn span {
+    display: none;
+  }
+}

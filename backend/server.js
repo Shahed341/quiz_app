@@ -1,15 +1,16 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
-// Routes
+// Route Imports
 const quizRoute = require('./routes/quizRoute');
 const flashcardRoute = require('./routes/flashcardRoute');
-const courseRoute = require('./routes/courseRoute'); // NEW: Added for dashboard
+const courseRoute = require('./routes/courseRoute');
 
-// Controller for unified seeding
-const courseController = require('./controllers/courseController');
+// Controller Import for Seeding
+const quizController = require('./controllers/quizController');
 
 const app = express();
 app.use(cors());
@@ -31,49 +32,51 @@ app.set('db', db);
 // --- ROUTES ---
 app.use('/api/quizzes', quizRoute);
 app.use('/api/flashcards', flashcardRoute);
-app.use('/api/courses', courseRoute); // NEW: Dashboard pulls courses from here
+app.use('/api/courses', courseRoute);
 
 const PORT = process.env.PORT || 5000;
-
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// --- STARTUP LOOP ---
+// --- STARTUP & SEEDING LOGIC ---
 const startServer = async () => {
   try {
+    // 1. Check DB Connectivity
     await db.query('SELECT 1');
-    console.log('✅ DB Connected');
+    console.log('✅ MySQL Database Connected');
 
-    let tableNames = [];
+    // 2. Wait for Schema Initialization
+    // This loop ensures tables exist (via your init.sql) before the seeder runs
+    let schemaReady = false;
     for (let i = 0; i < 15; i++) {
       const [rows] = await db.query('SHOW TABLES');
-      tableNames = rows.map((t) => Object.values(t)[0]);
+      const tableNames = rows.map((t) => Object.values(t)[0]);
 
-      if (tableNames.includes('flashcard_sets') && tableNames.includes('quizzes')) {
+      if (tableNames.includes('quizzes') && tableNames.includes('flashcard_sets')) {
+        schemaReady = true;
         break;
       }
-      console.log('⏳ Schema not ready — retrying (Step 2)...');
+      console.log(`⏳ Schema not found (Attempt ${i + 1}/15) — Waiting...`);
       await wait(2000);
     }
 
-    if (!tableNames.includes('flashcard_sets') || !tableNames.includes('quizzes')) {
-      throw new Error('Database schema did not load in time');
+    if (!schemaReady) {
+      throw new Error('Database schema initialization timed out.');
     }
 
-    console.log('⚙️ Schema ready — syncing recursive Courses folder...');
+    // 3. Run Two-Way Sync Seeder
+    // Scans /usr/src/Courses and syncs filesystem to DB
+    console.log('⚙️ Starting Two-Way Content Sync...');
+    await quizController.autoSeed(db);
+    console.log('📚 Sync Complete: Quizzes and Flashcards are up to date.');
 
-    // --- UNIFIED AUTO SEED ---
-    // This replaces separate quiz/flashcard seeders with the recursive folder scanner
-    if (courseController && typeof courseController.syncAllContent === 'function') {
-      await courseController.syncAllContent(db);
-      console.log('📚 All Courses, Quizzes, and Flashcards synced ✔');
-    }
-
+    // 4. Start Listening
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
+
   } catch (err) {
-    console.error('❌ Startup error:', err.message);
-    console.log('🔄 Retrying in 5 seconds...');
+    console.error('❌ Startup failed:', err.message);
+    console.log('🔄 Retrying server start in 5 seconds...');
     await wait(5000);
     startServer();
   }

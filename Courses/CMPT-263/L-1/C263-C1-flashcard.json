@@ -1,0 +1,259 @@
+{
+  "set": {
+    "title": "Specifying Algorithms - Chapter 1",
+    "description": "Foundational concepts of software specification, assertions, and algorithm correctness.",
+    "category": "Software Engineering"
+  },
+  "cards": [
+    {
+      "front": "What is the primary purpose of a software specification?",
+      "back": "To serve as a contract between the users (clients) and the developers (implementers) of a software component.",
+      "hint": "It defines expectations for both sides."
+    },
+    {
+      "front": "In the context of specifications, what is a 'client'?",
+      "back": "A person or program that uses a software component.",
+      "hint": "The user of the code."
+    },
+    {
+      "front": "What does the 'const' qualifier indicate in a declarative interface?",
+      "back": "It indicates that the associated identifier is a constant and its value must not be changed by the code.",
+      "hint": "Think about immutability."
+    },
+    {
+      "front": "What is an 'assertion' in software specification?",
+      "back": "A formula or logical statement that expresses a property of the program variables at a specific point in execution.",
+      "hint": "It's a logical claim about the state."
+    },
+    {
+      "front": "What is a 'pre-condition'?",
+      "back": "An assertion that must be true before the execution of a code fragment.",
+      "hint": "Requirements for the input."
+    },
+    {
+      "front": "What is a 'post-condition'?",
+      "back": "An assertion that must be true after the execution of a code fragment.",
+      "hint": "The guaranteed outcome."
+    },
+    {
+      "front": "What symbol is used for the logical 'implies' operator in this text?",
+      "back": "->",
+      "hint": "If P then Q."
+    },
+    {
+      "front": "What does 'iff' stand for in logical expressions?",
+      "back": "If and only if.",
+      "hint": "Logical equivalence."
+    },
+    {
+      "front": "What is the purpose of a 'ghost identifier' like A0?",
+      "back": "To represent the initial value of a variable so it can be referred to in the post-condition.",
+      "hint": "It 'haunts' the final state with initial values."
+    },
+    {
+      "front": "What is universal quantification?",
+      "back": "A logical statement asserting that a property holds for all possible values of a variable (ForAll).",
+      "hint": "The upside-down A symbol."
+    },
+    {
+      "front": "What is existential quantification?",
+      "back": "A logical statement asserting that there is at least one value for which a property holds (Exists).",
+      "hint": "The backward E symbol."
+    },
+    {
+      "front": "Define 'partial correctness'.",
+      "back": "If the pre-condition is true and the code terminates, then the post-condition must be true.",
+      "hint": "It doesn't guarantee the code actually finishes."
+    },
+    {
+      "front": "What is the declarative interface (signature) of an algorithm?",
+      "back": "A description of the variables used, their types, and whether they are constants or modifiable.",
+      "hint": "The 'header' of the specification."
+    },
+    {
+      "front": "In the array search example, why is 'n' usually a constant?",
+      "back": "Because the size of the array being searched typically should not be changed by the search algorithm.",
+      "hint": "Read-only input."
+    },
+    {
+      "front": "What logical connective is represented by '&&'?",
+      "back": "Conjunction (AND).",
+      "hint": "Both must be true."
+    },
+    {
+      "front": "What logical connective is represented by '||'?",
+      "back": "Disjunction (OR).",
+      "hint": "At least one must be true."
+    },
+    {
+      "front": "What does the expression 'A[0:n-1]' represent?",
+      "back": "The elements of array A from index 0 up to and including index n-1.",
+      "hint": "A range of elements."
+    },
+    {
+      "front": "If a pre-condition is not met, is the implementer responsible for the outcome?",
+      "back": "No, the contract is broken, and the behavior is undefined.",
+      "hint": "Garbage in, garbage out."
+    },
+    {
+      "front": "What is the 'state' of a program?",
+      "back": "The set of current values held by all variables in the program.",
+      "hint": "A snapshot of memory."
+    },
+    {
+      "front": "What is a 'counter-example' in the context of specification?",
+      "back": "A specific case or input that shows a code fragment does not satisfy its post-condition.",
+      "hint": "Proof of incorrectness."
+    },
+    {
+      "front": "In the Linear Search example, what happens if 'x' is not in the array?",
+      "back": "The variable 'present' should be false in the post-condition.",
+      "hint": "The 'iff' condition for existence."
+    },
+    {
+      "front": "How are comments containing assertions usually formatted in the book?",
+      "back": "/*@ ... @*/",
+      "hint": "Special comment markers."
+    },
+    {
+      "front": "Why is 'Professor Higgins' mentioned in Chapter 1?",
+      "back": "To illustrate how informal, verbal instructions can be ambiguous and incomplete.",
+      "hint": "The need for formality."
+    },
+    {
+      "front": "Can a post-condition refer to a variable that was not in the declarative interface?",
+      "back": "No, it should only refer to variables defined in the interface or global scope.",
+      "hint": "Scope rules apply."
+    },
+    {
+      "front": "What does 'x in A[0:n-1]' formally mean?",
+      "back": "Exists i such that (0 <= i < n) && (A[i] == x).",
+      "hint": "Using existential quantification."
+    },
+    {
+      "front": "What is a 'specification statement'?",
+      "back": "A combination of a declarative interface, a pre-condition, and a post-condition.",
+      "hint": "The complete contract."
+    },
+    {
+      "front": "What is 'total correctness'?",
+      "back": "Partial correctness plus a guarantee that the code will eventually terminate.",
+      "hint": "No infinite loops allowed."
+    },
+    {
+      "front": "Does Chapter 1 cover how to write the code itself?",
+      "back": "No, it focuses on how to specify what the code should do, not the implementation details.",
+      "hint": "The 'what', not the 'how'."
+    },
+    {
+      "front": "What is the negation of (P && Q)?",
+      "back": "!P || !Q",
+      "hint": "De Morgan's Laws."
+    },
+    {
+      "front": "What is the negation of (ForAll i, P(i))?",
+      "back": "Exists i such that !P(i).",
+      "hint": "Finding a single exception."
+    },
+    {
+      "front": "What is the role of the 'implementer'?",
+      "back": "To write code that satisfies the specification for any valid pre-condition.",
+      "hint": "The coder."
+    },
+    {
+      "front": "What notation is used to represent an assignment in assertions?",
+      "back": "Assertions typically use '==' for comparison; assignment is not usually part of the logic formula itself.",
+      "hint": "Logic vs. Command."
+    },
+    {
+      "front": "Why are types (like int or bool) important in specifications?",
+      "back": "They define the set of possible values a variable can hold and the operations allowed.",
+      "hint": "Data constraints."
+    },
+    {
+      "front": "What is an 'empty' array range in this notation?",
+      "back": "A range where the upper bound is less than the lower bound (e.g., 0 to -1).",
+      "hint": "n = 0."
+    },
+    {
+      "front": "True or False: A specification should define what happens if the computer loses power.",
+      "back": "False; specifications usually assume an idealized execution environment.",
+      "hint": "Idealized vs. Real-world."
+    },
+    {
+      "front": "In logic, is (P -> Q) true if P is false?",
+      "back": "Yes, an implication is vacuously true if the antecedent is false.",
+      "hint": "The truth table of 'implies'."
+    },
+    {
+      "front": "What does the symbol '!=' mean?",
+      "back": "Not equal to.",
+      "hint": "Inequality."
+    },
+    {
+      "front": "What does 'bounded search' mean?",
+      "back": "Searching within a specific, finite range of indices in a data structure.",
+      "hint": "Limits on the search."
+    },
+    {
+      "front": "What is a 'predicate'?",
+      "back": "A property or relation that can be true or false depending on the values of its variables.",
+      "hint": "A boolean-valued function."
+    },
+    {
+      "front": "How do you specify that an array 'A' remains unchanged?",
+      "back": "By using a post-condition like: A == A0.",
+      "hint": "Comparison to ghost identifier."
+    },
+    {
+      "front": "What is the scope of a quantified variable like 'i' in 'ForAll i'?",
+      "back": "It is local to the quantification expression.",
+      "hint": "Bound variable."
+    },
+    {
+      "front": "Why are formal specifications better than natural language?",
+      "back": "They eliminate ambiguity and allow for mathematical verification of correctness.",
+      "hint": "Precision."
+    },
+    {
+      "front": "What is the difference between '=' and '==' in C-style notation?",
+      "back": "'=' is for assignment; '==' is for checking equality.",
+      "hint": "Action vs. Comparison."
+    },
+    {
+      "front": "Can a pre-condition be 'true'?",
+      "back": "Yes, it means there are no restrictions on the initial state for the code to work.",
+      "hint": "Always satisfied."
+    },
+    {
+      "front": "What does 'satisfied' mean in terms of assertions?",
+      "back": "It means the assertion evaluates to true in the current state.",
+      "hint": "Hold true."
+    },
+    {
+      "front": "What is a 'robust' specification?",
+      "back": "One that clearly defines behavior even for 'edge cases' or unusual (but valid) inputs.",
+      "hint": "Handling boundaries."
+    },
+    {
+      "front": "What does '0 <= i < n' specify about the index i?",
+      "back": "That i is a non-negative integer less than n.",
+      "hint": "Valid index range."
+    },
+    {
+      "front": "In the expression 'present iff ...', what happens if the search finds multiple instances?",
+      "back": "The specification usually just requires 'present' to be true if at least one exists.",
+      "hint": "Existence vs. Uniqueness."
+    },
+    {
+      "front": "Is a specification a piece of executable code?",
+      "back": "No, it is a mathematical description of the code's behavior.",
+      "hint": "Documentation vs. Logic."
+    },
+    {
+      "front": "Who is the author of 'Specifying Software'?",
+      "back": "R. D. Tennent.",
+      "hint": "Check the title page."
+    }
+  ]
+}

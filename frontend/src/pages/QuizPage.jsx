@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, Lightbulb, Trophy } from 'lucide-react';
+import { ChevronLeft, Lightbulb, Trophy, History, Trash2 } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/QuizPage.css';
 
@@ -21,7 +21,6 @@ function QuizPage() {
       .catch((err) => console.error("Error loading quiz:", err));
   }, [quizId]);
 
-  // FIXED: Save result to MySQL instead of localStorage
   const saveResultToDatabase = async (finalScore) => {
     const percentage = Math.round((finalScore / quiz.questions.length) * 100);
     
@@ -40,6 +39,23 @@ function QuizPage() {
     }
   };
 
+  // NEW: Delete Quiz Functionality
+  const handleDeleteQuiz = async () => {
+    if (window.confirm("Are you sure you want to delete this quiz? This action cannot be undone.")) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/quizzes/${quizId}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          alert("Quiz deleted successfully");
+          navigate(`/courses/${courseId}`);
+        }
+      } catch (err) {
+        console.error("❌ Failed to delete quiz:", err);
+      }
+    }
+  };
+
   if (!quiz) return <div className="loading-stage">Initializing Assessment...</div>;
 
   const q = quiz.questions[curr];
@@ -55,7 +71,7 @@ function QuizPage() {
       setCurr(curr + 1);
       setShowHint(false);
     } else {
-      saveResultToDatabase(currentScore); // Trigger DB save
+      saveResultToDatabase(currentScore);
       setDone(true);
     }
   };
@@ -97,15 +113,29 @@ function QuizPage() {
   return (
     <div className="quiz-page-container">
       <header className="quiz-header-minimal">
-        <button className="back-link-matte" onClick={() => navigate(`/courses/${courseId}`)}>
-          <ChevronLeft size={18} /> <span>EXIT QUIZ</span>
-        </button>
+        <div className="header-left">
+            <button className="back-link-matte" onClick={() => navigate(`/courses/${courseId}`)}>
+                <ChevronLeft size={18} /> <span>EXIT</span>
+            </button>
+            {/* HISTORY BUTTON */}
+            <button className="header-action-btn" onClick={() => navigate(`/quiz-history/${quizId}`)}>
+                <History size={18} /> <span>HISTORY</span>
+            </button>
+        </div>
+
         <div className="quiz-identity">
           <span className="quiz-breadcrumb">{courseId?.replace(/-/g, ' ').toUpperCase()}</span>
           <h1 className="quiz-title-main">{quiz.title}</h1>
         </div>
-        <div className="quiz-stats-box">
-          {curr + 1} / {quiz.questions.length}
+
+        <div className="header-right">
+            {/* DELETE BUTTON */}
+            <button className="header-action-btn delete-btn" onClick={handleDeleteQuiz}>
+                <Trash2 size={18} />
+            </button>
+            <div className="quiz-stats-box">
+                {curr + 1} / {quiz.questions.length}
+            </div>
         </div>
       </header>
 

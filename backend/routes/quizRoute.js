@@ -19,12 +19,21 @@ router.post('/sync', async (req, res) => {
  * DISPLAY ROUTES
  */
 router.get('/', quizController.getAllQuizzes);
+
+// NEW: Quiz History Route (Used by QuizHistory.jsx)
+router.get('/history/:id', quizController.getQuizHistory);
+
+// Get specific quiz questions
 router.get('/:id', quizController.getQuizById);
 
 /**
- * SAVE RESULTS ROUTE <--- ADD THIS
- * This connects the frontend "Finish Quiz" action to the database save logic.
+ * SAVE RESULTS ROUTE
  */
 router.post('/results', quizController.saveQuizResult); 
+
+/**
+ * DELETE ROUTE <--- ADD THIS TO FIX THE 404
+ */
+router.delete('/:id', quizController.deleteQuiz);
 
 module.exports = router;
