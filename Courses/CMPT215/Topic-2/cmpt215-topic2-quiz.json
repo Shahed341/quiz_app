@@ -1,0 +1,21 @@
+{
+  "title": "CMPT215 Topic 2 Quiz",
+  "last_materialized": "2026-01-17T06:52:26.395Z",
+  "questions": [
+    {
+      "question_text": "Sample question for CMPT215 Topic 2?",
+      "options": {
+        "0": "Option A",
+        "1": "Option B",
+        "2": "Option C",
+        "3": "Option D",
+        "A": "asdf",
+        "B": "asdf",
+        "C": "asdf",
+        "D": "asdf"
+      },
+      "correct_answer": "A",
+      "explanation": "This is a placeholder explanation."
+    }
+  ]
+}

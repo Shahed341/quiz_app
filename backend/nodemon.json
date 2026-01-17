@@ -1,0 +1,10 @@
+{
+  "verbose": true,
+  "ignore": [
+    "node_modules",
+    "Courses/*",
+    "*.test.js",
+    "utils/migrate.js"
+  ],
+  "ext": "js,json"
+}

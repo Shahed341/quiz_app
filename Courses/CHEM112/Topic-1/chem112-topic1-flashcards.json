@@ -1,0 +1,43 @@
+{
+  "title": "CHEM112 Topic 1 Flashcards",
+  "is_archived": false,
+  "last_materialized": "2026-01-17T05:28:20.418Z",
+  "cards": [
+    {
+      "uid": "chem112-t1-fc1",
+      "front": "Key Concept for CHEM112 Topic 1",
+      "back": "Detailed definition of the concept.",
+      "hint": "Think about the lecture notes."
+    },
+    {
+      "uid": "fc-1768626695465",
+      "front": "adsf",
+      "back": "asdf",
+      "hint": "adsf"
+    },
+    {
+      "uid": "fc-1768627357838",
+      "front": "asdf",
+      "back": "asdf",
+      "hint": ""
+    },
+    {
+      "uid": "fc-1768627361498",
+      "front": "asdf",
+      "back": "asdf",
+      "hint": ""
+    },
+    {
+      "uid": "fc-1768627616463",
+      "front": "adf",
+      "back": "adsf",
+      "hint": ""
+    },
+    {
+      "uid": "fc-1768627700408",
+      "front": "asdf",
+      "back": "asdf",
+      "hint": "adsf"
+    }
+  ]
+}

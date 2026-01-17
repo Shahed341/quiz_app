@@ -1,0 +1,19 @@
+{
+  "title": "asdfasdfasdf",
+  "is_archived": false,
+  "last_materialized": "2026-01-17T07:49:17.080Z",
+  "cards": [
+    {
+      "uid": "fc-1768627939071",
+      "front": "adsfadsfadfs",
+      "back": "adfadfsadfs",
+      "hint": ""
+    },
+    {
+      "uid": "fc-1768636157064",
+      "front": "afsadsfdafdaafdadffdadfsadfasadfsfalksdfjg;alsdkfj;laskdjf;laskdjf;alsdkfja;lsdkfja;lsdkfj",
+      "back": "afsadsfdafdaafdadffdadfsadfasadfsfalksdfjg;alsdkfj;laskdjf;laskdjf;alsdkfja;lsdkfja;lsdkfj",
+      "hint": "afsadsfdafdaafdadffdadfsadfasadfsfalksdfjg;alsdkfj;laskdjf;laskdjf;alsdkfja;lsdkfja;lsdkfj"
+    }
+  ]
+}

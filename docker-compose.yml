@@ -1,46 +1,62 @@
 services:
+  # 1. DATABASE: The MySQL Void
   db:
     image: mysql:8.0
+    container_name: quiz-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD} 
-      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: quiz_app
     ports:
       - "3306:3306"
     volumes:
-      - ./mysql/quiz.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro # Read-only init
+      - db_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
-      interval: 10s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s # Slightly longer to prevent CPU spikes during startup
       timeout: 5s
       retries: 5
 
+  # 2. BACKEND: Sync & AI Engine
   backend:
     build: ./backend
+    container_name: quiz-backend
     ports:
       - "5000:5000"
     environment:
-      DB_HOST: db
-      DB_USER: root
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=quiz_app
+      - GEMINI_KEY=${GEMINI_KEY}
+      - COURSE_DATA_PATH=/usr/src/app/Courses
+      - CHOKIDAR_USEPOLLING=true # Critical for Windows-to-Docker file detection
+      - WATCHPACK_POLLING=true
     volumes:
       - ./backend:/usr/src/app
-      - /usr/src/app/node_modules
-      # FIX: Changed from ./questions to ./Courses to match your new local structure
-      - ./Courses:/usr/src/Courses  
+      - /usr/src/app/node_modules # Anonymous volume to protect container packages
+      - ./Courses:/usr/src/app/Courses # The physical Scholar Drive (I: Drive mapping)
     depends_on:
       db:
         condition: service_healthy
 
+  # 3. FRONTEND: Materialized UI
   frontend:
     build: ./frontend
+    container_name: quiz-frontend
     ports:
       - "5173:5173"
     environment:
       - VITE_API_URL=http://localhost:5000/api
+      - CHOKIDAR_USEPOLLING=true
     volumes:
       - ./frontend:/app
-      - /app/node_modules
+      - /app/node_modules # Prevents local node_modules from overriding container build
+    stdin_open: true
+    tty: true
     depends_on:
       - backend
+
+volumes:
+  db_data: # Persistent storage for MySQL records

@@ -1,85 +1,95 @@
 const express = require('express');
-const mysql = require('mysql2');
 const cors = require('cors');
+const chokidar = require('chokidar');
 const path = require('path');
-require('dotenv').config();
-
-// Route Imports
-const quizRoute = require('./routes/quizRoute');
-const flashcardRoute = require('./routes/flashcardRoute');
-const courseRoute = require('./routes/courseRoute');
-
-// Controller Import for Seeding
-const quizController = require('./controllers/quizController');
+const apiRoutes = require('./routes/api');
+const pool = require('./utils/db');
+const migrate = require('./utils/migrate'); 
+const syncController = require('./controllers/syncController');
 
 const app = express();
+
+// 1. Middleware
 app.use(cors());
 app.use(express.json());
 
-// --- DATABASE POOL ---
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'db',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
+// API Request Logger
+app.use((req, res, next) => {
+    console.log(`[API] 📥 ${req.method} ${req.url} - ${new Date().toLocaleTimeString()}`);
+    next();
 });
 
-const db = pool.promise();
-app.set('db', db);
+// 2. Routes
+app.use('/api', apiRoutes);
 
-// --- ROUTES ---
-app.use('/api/quizzes', quizRoute);
-app.use('/api/flashcards', flashcardRoute);
-app.use('/api/courses', courseRoute);
-
-const PORT = process.env.PORT || 5000;
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-// --- STARTUP & SEEDING LOGIC ---
 const startServer = async () => {
-  try {
-    // 1. Check DB Connectivity
-    await db.query('SELECT 1');
-    console.log('✅ MySQL Database Connected');
+    // Determine path for Docker (/usr/src/app/Courses) or Local Windows
+    const watchPath = process.env.COURSE_DATA_PATH || path.join(__dirname, 'Courses');
+    
+    console.log("\n" + "╔" + "═".repeat(50) + "╗");
+    console.log(`║   🌌  SCHOLAR SYSTEM: INITIALIZING VOID...       ║`);
+    console.log("╚" + "═".repeat(50) + "╝");
 
-    // 2. Wait for Schema Initialization
-    // This loop ensures tables exist (via your init.sql) before the seeder runs
-    let schemaReady = false;
-    for (let i = 0; i < 15; i++) {
-      const [rows] = await db.query('SHOW TABLES');
-      const tableNames = rows.map((t) => Object.values(t)[0]);
+    try {
+        // STEP 1: Test MySQL Connection
+        console.log(`[DB] 🛰️  Targeting MySQL Database...`);
+        await pool.query('SELECT 1');
+        console.log(`[DB] ✅ Core Connection Established.`);
 
-      if (tableNames.includes('quizzes') && tableNames.includes('flashcard_sets')) {
-        schemaReady = true;
-        break;
-      }
-      console.log(`⏳ Schema not found (Attempt ${i + 1}/15) — Waiting...`);
-      await wait(2000);
+        // STEP 2: RUN MIGRATIONS
+        // This fixes the "Unknown column is_ai_generated" error automatically
+        await migrate(); 
+
+        // STEP 3: Initial Startup Sync
+        // Auto-loads CMPT/CHEM/STAT folders into the fixed schema
+        console.log(`[SYNC] 🔄 Crawling Scholar Drive: ${watchPath}`);
+        await syncController.syncAll(); 
+        console.log(`[SYNC] ✅ Scholar Drive Materialized in Database.`);
+
+        // STEP 4: Initialize File Watcher (Chokidar)
+        console.log(`[WATCHER] 👀 Watching for local JSON edits...`);
+        const watcher = chokidar.watch(watchPath, {
+            persistent: true,
+            ignoreInitial: true, 
+            usePolling: true,    
+            interval: 500,       
+            binaryInterval: 1000,
+            depth: 10,           
+            awaitWriteFinish: {  
+                stabilityThreshold: 1000,
+                pollInterval: 200
+            }
+        });
+
+        watcher.on('all', async (event, filePath) => {
+            if (filePath.endsWith('.json')) {
+                const relativeName = path.relative(watchPath, filePath);
+                console.log(`[WATCHER] 🔔 ${event.toUpperCase()}: ${relativeName}`);
+                
+                if (event === 'add' || event === 'change') {
+                    console.log(`[WATCHER] ⚙️  Syncing change to database...`);
+                    await syncController.routeFileToProcessor(filePath);
+                }
+            }
+        });
+
+        watcher.on('error', error => console.error(`[WATCHER] ❌ Error: ${error}`));
+
+        // STEP 5: Start API Server
+        const PORT = process.env.PORT || 5000;
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log("\n" + "═".repeat(40));
+            console.log(`🚀 VOID SERVER ONLINE`);
+            console.log(`📡 URL: http://localhost:${PORT}`);
+            console.log(`📂 DRIVE: ${watchPath}`);
+            console.log("═".repeat(40) + "\n");
+        });
+
+    } catch (err) {
+        console.error(`[CRITICAL] ❌ Void Collapse: ${err.message}`);
+        console.log('♻️  Attempting restart in 5 seconds...');
+        setTimeout(startServer, 5000);
     }
-
-    if (!schemaReady) {
-      throw new Error('Database schema initialization timed out.');
-    }
-
-    // 3. Run Two-Way Sync Seeder
-    // Scans /usr/src/Courses and syncs filesystem to DB
-    console.log('⚙️ Starting Two-Way Content Sync...');
-    await quizController.autoSeed(db);
-    console.log('📚 Sync Complete: Quizzes and Flashcards are up to date.');
-
-    // 4. Start Listening
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-    });
-
-  } catch (err) {
-    console.error('❌ Startup failed:', err.message);
-    console.log('🔄 Retrying server start in 5 seconds...');
-    await wait(5000);
-    startServer();
-  }
 };
 
 startServer();

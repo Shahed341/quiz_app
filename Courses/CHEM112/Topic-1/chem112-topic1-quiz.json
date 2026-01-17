@@ -1,0 +1,54 @@
+{
+  "title": "CHEM112 Topic 1 Quiz",
+  "last_materialized": "2026-01-17T05:08:58.404Z",
+  "questions": [
+    {
+      "question_text": "Sample questiohl;jkhjkl;n for CHEM112 Topic 1?",
+      "options": {
+        "0": "Option A",
+        "1": "Option B",
+        "2": "Option C",
+        "3": "Option D",
+        "A": "sdfgsdfg",
+        "B": "sdfgadf",
+        "C": "asdfadsf",
+        "D": "adsfasdf"
+      },
+      "correct_answer": "A",
+      "explanation": "This is a placeholder explanation."
+    },
+    {
+      "question_text": "d",
+      "options": {
+        "A": "d",
+        "B": "d",
+        "C": "d",
+        "D": "d"
+      },
+      "correct_answer": "A",
+      "explanation": ""
+    },
+    {
+      "question_text": "",
+      "options": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "correct_answer": "A",
+      "explanation": ""
+    },
+    {
+      "question_text": "asdf",
+      "options": {
+        "A": "asdf",
+        "B": "asdf",
+        "C": "adf",
+        "D": "adsf"
+      },
+      "correct_answer": "A",
+      "explanation": ""
+    }
+  ]
+}
